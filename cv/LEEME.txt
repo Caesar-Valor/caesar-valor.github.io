@@ -1,0 +1,7 @@
+Carpeta del currículum.
+
+Coloca aquí el PDF con este nombre exacto:
+  cesar-valenzuela-cv.pdf
+
+El botón "Descargar CV" del inicio (index.html) enlaza a cv/cesar-valenzuela-cv.pdf.
+Puedes borrar este archivo cuando subas el PDF.
