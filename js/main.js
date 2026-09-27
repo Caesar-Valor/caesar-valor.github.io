@@ -98,6 +98,15 @@ if (journey) {
   }
 }
 
+// Botón flotante de WhatsApp: se oculta mientras Contacto está en pantalla (ahí ya hay uno grande)
+const waFloat = document.querySelector('.wa-float');
+const contacto = document.getElementById('contacto');
+if (waFloat && contacto && canObserve) {
+  new IntersectionObserver(entries => {
+    waFloat.classList.toggle('is-hidden', entries[0].isIntersecting);
+  }, { threshold: 0 }).observe(contacto);
+}
+
 // Modo noche, solo escritorio: resplandor de vela que sigue al cursor con retraso
 if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   const candle = document.createElement('div');
