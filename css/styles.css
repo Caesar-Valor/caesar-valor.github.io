@@ -474,22 +474,167 @@ input:focus, textarea:focus { outline: none; border-color: var(--accent); }
 textarea { min-height: 140px; resize: vertical; }
 form .btn { justify-self: start; cursor: pointer; }
 
-/* ===== Botón flotante de WhatsApp =====
+/* ===== Botones flotantes: WhatsApp + asistente de Noir =====
    Por debajo de la navegación (z-index 50), para no tapar el menú móvil abierto */
-.wa-float {
+.float-group {
   position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 45;
+  display: flex; flex-direction: row-reverse; align-items: center; gap: 10px;
+  transition: opacity .3s ease, visibility .3s;
+}
+/* En Contacto ya está el botón grande de WhatsApp: el grupo se aparta para no tapar el formulario */
+.float-group.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.wa-float {
   display: grid; place-items: center;
   width: 56px; height: 56px;
   border-radius: 50%;
   background: var(--accent); color: var(--on-accent);
   box-shadow: 0 2px 6px rgba(31, 26, 23, .18), 0 10px 24px -8px rgba(31, 26, 23, .45);
-  transition: background-color .2s ease, transform .2s ease, opacity .3s ease, visibility .3s;
+  transition: background-color .2s ease, transform .2s ease;
 }
 .wa-float:hover { background: color-mix(in srgb, var(--accent) 85%, var(--text)); transform: translateY(-2px); }
 .wa-float:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; border-radius: 50%; }
 .wa-float svg { width: 28px; height: 28px; }
-/* En Contacto ya está el botón grande de WhatsApp: el flotante se aparta para no tapar el formulario */
-.wa-float.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* Burbuja de las patitas: pergamino en día y en noche, para destacar también sobre fondo oscuro */
+.noir-toggle {
+  display: grid; place-items: center;
+  width: 40px; height: 40px; padding: 0;
+  border-radius: 50%;
+  background: var(--parchment); color: #1F1A17;
+  border: 1px solid var(--gold);
+  box-shadow: 0 2px 6px rgba(31, 26, 23, .16), 0 8px 18px -8px rgba(31, 26, 23, .4);
+  cursor: pointer;
+  transition: transform .2s ease, border-color .2s ease;
+}
+.noir-toggle[hidden] { display: none; }
+.noir-toggle:hover { transform: translateY(-2px); }
+.noir-toggle[aria-expanded="true"] { border-color: var(--accent); }
+.noir-toggle:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; border-radius: 50%; }
+.noir-toggle svg { width: 24px; height: 24px; }
+
+/* Globito de saludo, sobre las patitas (su colita apunta a ellas) */
+.noir-hint {
+  position: absolute; right: 36px; bottom: calc(100% + 12px);
+  display: flex; align-items: flex-start; gap: .35rem;
+  width: max-content; max-width: min(290px, calc(100vw - 2.5rem));
+  padding: .6rem .5rem .6rem .85rem;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  font-size: .88rem; line-height: 1.4;
+}
+.noir-hint[hidden] { display: none; }
+.noir-hint::after {
+  content: ''; position: absolute; right: 42px; bottom: -6px;
+  width: 10px; height: 10px;
+  background: var(--surface);
+  border-right: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
+.noir-hint-close,
+.noir-close {
+  display: grid; place-items: center; flex-shrink: 0;
+  background: none; border: 0; border-radius: 50%;
+  color: var(--muted); cursor: pointer;
+  transition: color .2s, background-color .2s;
+}
+.noir-hint-close { width: 24px; height: 24px; margin-top: -2px; }
+.noir-hint-close svg { width: 14px; height: 14px; }
+.noir-hint-close:hover,
+.noir-close:hover { color: var(--text); background: color-mix(in srgb, var(--gold) 14%, transparent); }
+
+/* Panel del asistente: sobre los botones flotantes, por debajo de la navegación */
+.noir-panel {
+  position: fixed; right: 1.25rem; bottom: calc(1.25rem + 56px + 12px); z-index: 46;
+  display: flex; flex-direction: column;
+  width: 360px;
+  max-height: calc(100vh - 68px - 1.25rem - 56px - 12px - 1rem);  /* nunca llega a la navegación */
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--gold);
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.noir-panel[hidden] { display: none; }
+.noir-head {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .85rem .85rem .85rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+/* Emblema recortado en círculo: se amplía para que el escudo llene el círculo */
+.noir-avatar {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 50%; overflow: hidden;
+  border: 1px solid var(--gold);
+  background: #3A1820;  /* vino del escudo */
+}
+.noir-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transform: scale(1.45); }
+.noir-head > div { flex: 1; min-width: 0; }
+.noir-name { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; line-height: 1.1; }
+.noir-sub { font-size: .8rem; color: var(--muted); line-height: 1.35; }
+.noir-close { width: 34px; height: 34px; }
+.noir-close svg { width: 18px; height: 18px; }
+/* Solo el contenido hace scroll; la cabecera y el pie se quedan fijos */
+.noir-body { flex: 1 1 auto; min-height: 0; padding: 1rem; display: grid; gap: 1rem; align-content: start; overflow-y: auto; overscroll-behavior: contain; }
+.noir-head, .noir-foot { flex-shrink: 0; }
+/* Mensaje de Noir con forma de burbuja de chat */
+.noir-msg {
+  justify-self: start; max-width: 88%;
+  padding: .7rem .9rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 12px 12px 12px 3px;
+  font-size: .95rem; line-height: 1.5;
+}
+.noir-options { display: grid; gap: .5rem; }
+.noir-option {
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+  width: 100%; padding: .7rem .9rem;
+  background: none; color: var(--text);
+  border: 1px solid var(--gold); border-radius: var(--radius);
+  font: inherit; font-size: .95rem; font-weight: 500; text-align: left;
+  cursor: pointer;
+  transition: background-color .2s, border-color .2s;
+}
+.noir-option:hover { background: color-mix(in srgb, var(--gold) 12%, transparent); }
+.noir-option svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--accent); }
+/* Etiqueta pequeña junto al texto, p. ej. "Próximamente" */
+.noir-badge {
+  display: inline-block; margin-left: .3rem; padding: .05rem .45rem;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: var(--bg-alt); color: var(--muted);
+  font-size: .68rem; font-weight: 600; letter-spacing: .04em; vertical-align: .1em;
+}
+/* "← Volver": discreto, debajo de las opciones */
+.noir-back {
+  justify-self: start;
+  margin-top: .15rem; padding: .35rem .5rem;
+  background: none; border: 0; border-radius: var(--radius);
+  color: var(--muted); font: inherit; font-size: .9rem; font-weight: 500;
+  cursor: pointer;
+  transition: color .2s, background-color .2s;
+}
+.noir-back:hover { color: var(--text); background: color-mix(in srgb, var(--gold) 12%, transparent); }
+.noir-foot {
+  padding: .7rem 1rem;
+  border-top: 1px solid var(--border);
+  font-size: .78rem; color: var(--muted); text-align: center;
+}
+
+/* Celular: el panel sale desde abajo a todo lo ancho, como una hoja */
+@media (max-width: 560px) {
+  .noir-panel {
+    left: 0; right: 0; bottom: 0;
+    width: auto;
+    max-height: calc(100vh - 68px - .75rem);
+    max-height: calc(100dvh - 68px - .75rem);
+    border-left: 0; border-right: 0; border-bottom: 0;
+    border-radius: 14px 14px 0 0;
+  }
+  .noir-foot { padding-bottom: max(.7rem, env(safe-area-inset-bottom)); }
+}
 
 /* ===== Página 404 ===== */
 .notfound { min-height: calc(100vh - 70px); display: flex; align-items: center; padding: 7rem 0 4rem; }
@@ -513,6 +658,10 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: none; }
 }
+@keyframes noir-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
 @media (prefers-reduced-motion: no-preference) {
   /* Entrada escalonada del inicio ("backwards" para no bloquear el hover de la lámina) */
   .hero .prompt,
@@ -530,8 +679,14 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   .device-laptop { animation-delay: .78s; animation-duration: 1s; }
   .device-phone { animation-delay: .98s; animation-duration: 1s; }
 
-  /* Botón flotante: aparece después de la entrada del inicio */
-  .wa-float { animation: rise .6s cubic-bezier(.2, .7, .2, 1) 1.3s backwards; }
+  /* Botones flotantes: aparecen después de la entrada del inicio */
+  .float-group { animation: rise .6s cubic-bezier(.2, .7, .2, 1) 1.3s backwards; }
+
+  /* Asistente de Noir: panel y globito entran con opacidad y 8px hacia arriba */
+  .noir-panel.is-open,
+  .noir-hint:not([hidden]) { animation: noir-in .22s cubic-bezier(.2, .7, .2, 1); }
+  /* Cambio de paso: el contenido entra suave */
+  .noir-body.is-changing > * { animation: noir-in .22s cubic-bezier(.2, .7, .2, 1); }
 
   /* Secciones: aparecen una sola vez al entrar en pantalla */
   .js main > section:not(.hero) > .wrap {
@@ -624,7 +779,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .prompt .cursor { animation: none; }
-  .btn-primary:hover, .shot:hover, .wa-float:hover { transform: none; }
+  .btn-primary:hover, .shot:hover, .wa-float:hover, .noir-toggle:hover { transform: none; }
   .candle { display: none; }
   html { scroll-behavior: auto; }
 }
