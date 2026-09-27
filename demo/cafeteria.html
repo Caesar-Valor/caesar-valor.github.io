@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<!-- Seguridad: solo se cargan recursos del propio sitio -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amor y Café · Café y pan del día en La Vega</title>
+<meta name="description" content="Amor y Café es una cafetería ficticia creada como demostración: menú interactivo con buscador y pedidos por WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Amor y Café">
+<meta property="og:title" content="Amor y Café · Café y pan del día en La Vega">
+<meta property="og:description" content="Cafetería ficticia de demostración: menú interactivo con buscador y pedidos por WhatsApp.">
+<meta property="og:locale" content="es_DO">
+<meta property="og:url" content="https://caesar-valor.github.io/demo/cafeteria.html">
+<meta property="og:image" content="https://caesar-valor.github.io/img/demo-cafeteria.webp">
+<meta property="og:image:alt" content="Página de inicio de Amor y Café, cafetería ficticia de demostración">
+<link rel="preload" href="../fonts/figtree.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="cafeteria.css">
+</head>
+<body>
+
+<p class="demo-aviso" role="note">Sitio de demostración: los pedidos llegan al desarrollador, no a la cafetería.</p>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#inicio" class="wordmark" aria-label="Amor y Café, inicio">Amor <span>y</span> Café</a>
+    <nav aria-label="Principal">
+      <ul>
+        <li><a href="#casa">Nuestra casa</a></li>
+        <li><a href="#horno">Del horno</a></li>
+        <li><a href="#menu">Menú</a></li>
+        <li><a href="#visita">Visítanos</a></li>
+      </ul>
+    </nav>
+    <a href="#menu" class="btn btn-amber nav-cta">Pedir ahora</a>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="inicio">
+  <div class="wrap">
+    <div class="hero-text">
+      <span class="status" id="estado"><i></i><span>Consultando horario…</span></span>
+      <h1>Amor <span class="y">y</span> Café</h1>
+      <p class="big">Café recién hecho y pan del día en La Vega. Una mesa tranquila para empezar la mañana o cerrar la tarde.</p>
+      <div class="acciones">
+        <a href="#menu" class="btn btn-amber">Ver el menú y pedir</a>
+        <a href="#visita" class="btn btn-ghost">Cómo llegar</a>
+      </div>
+    </div>
+    <figure class="hero-foto">
+      <img src="img/terraza.webp" alt="Terraza de la cafetería con sombrillas, mesas y una guirnalda de bombillos" width="1100" height="1469" fetchpriority="high">
+      <svg class="guirnalda" viewBox="0 0 400 60" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 10 Q100 45 200 18 T400 12" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1"/>
+        <g id="bombillos"></g>
+      </svg>
+      <figcaption>Calle Principal, La Vega</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="casa kraft" id="casa">
+  <div class="wrap">
+    <figure class="casa-foto">
+      <img src="img/cafe-y-pan.webp" alt="Taza de café junto a un pan rústico sobre una mesa clara" width="900" height="1350" loading="lazy">
+    </figure>
+    <div class="casa-texto">
+      <h2>Café sin prisa, pan con paciencia</h2>
+      <p>En Amor y Café creemos que las cosas buenas llevan su tiempo. Molemos el café al momento, horneamos en tandas pequeñas cada mañana y preparamos cada taza como si fuera para alguien de la familia.</p>
+      <p>Somos un rincón tranquilo para el desayuno antes del trabajo, la merienda con amigos o una tarde de lectura. Pasa, pide lo de siempre o déjate sorprender.</p>
+      <p class="firma">Te esperamos con la cafetera encendida.</p>
+      <div class="datos">
+        <div><b>Pan del día</b><span>horneado cada mañana</span></div>
+        <div><b>Café dominicano</b><span>molido al momento</span></div>
+        <div><b>Terraza</b><span>con sombra y plantas</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="croissant" aria-labelledby="t-croissant">
+  <div class="wrap">
+    <figure>
+      <img src="img/croissants.webp" alt="Croissants dorados recién horneados sobre papel de hornear" width="1100" height="733" loading="lazy">
+    </figure>
+    <div>
+      <h2 id="t-croissant">La especialidad de la casa: el croissant</h2>
+      <p class="lead lead-oscuro">Mantequilla, harina y paciencia. Lo horneamos temprano y casi nunca llega a la tarde.</p>
+      <ul>
+        <li><div><strong>Hojaldrado</strong><p>Capas finas que crujen al morder y una miga suave por dentro.</p></div></li>
+        <li><div><strong>Dorado</strong><p>Horneado hasta el punto justo, con brillo de mantequilla.</p></div></li>
+        <li><div><strong>Del día</strong><p>Sale del horno cada mañana; cuando se acaba, se acabó.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="horno kraft" id="horno">
+  <div class="wrap">
+    <div class="horno-top">
+      <div>
+        <h2>Recién salido del horno</h2>
+        <p class="lead mt-08">La vitrina cambia cada día según lo que sale del horno. Escríbenos y te decimos qué hay hoy.</p>
+      </div>
+      <a class="btn btn-pothos" id="btn-vitrina" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 0 0 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.7-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3Z"/></svg>
+        ¿Qué hay hoy en vitrina?
+      </a>
+    </div>
+    <div class="horno-grid">
+      <figure class="alto">
+        <img src="img/galletas.webp" alt="Cesta con galletas de chispas de chocolate" width="800" height="1000" loading="lazy">
+        <figcaption><b>Galletas de chispas</b><span>Grandes, crujientes por fuera y suaves por dentro.</span></figcaption>
+      </figure>
+      <figure>
+        <img src="img/pasteles-de-fruta.webp" alt="Hojaldres con crema, fresas y arándanos" width="800" height="533" loading="lazy" class="r16">
+        <figcaption><b>Hojaldres de frutos rojos</b><span>Con crema, fresas y arándanos.</span></figcaption>
+      </figure>
+      <figure>
+        <img src="img/muffins.webp" alt="Muffins en capacillos de papel sobre un mantel" width="800" height="1204" loading="lazy" class="r16">
+        <figcaption><b>Muffins del día</b><span>De guineo, de chocolate o de lo que salga del horno.</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu" aria-labelledby="t-menu">
+  <div class="wrap">
+    <div class="menu-top">
+      <h2 id="t-menu">El menú</h2>
+      <p class="lead">Elige lo que te provoca, arma tu pedido aquí y nos llega completo por WhatsApp. Sin audios, sin dictar nada.</p>
+      <label class="buscador">
+        <span class="sr">Buscar en el menú</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="buscar" placeholder="Busca un latte, un croissant, fresa…" autocomplete="off" maxlength="60">
+      </label>
+    </div>
+    <div class="chips" role="toolbar" aria-label="Categorías del menú"><div id="chips"></div></div>
+    <div id="lista"></div>
+    <p class="nota-itbis">Precios en pesos dominicanos (RD$), ITBIS incluido. Frutas marcadas como de temporada según disponibilidad.</p>
+  </div>
+</section>
+
+<section class="visita kraft" id="visita" aria-labelledby="t-visita">
+  <div class="wrap">
+    <div>
+      <h2 id="t-visita">Ven a vernos</h2>
+      <p class="lead mt-08">Terraza con plantas, bombillos y buena conversación.</p>
+      <table class="horario" aria-label="Horario">
+        <tbody id="horario"></tbody>
+      </table>
+    </div>
+    <div class="tarjeta-dir">
+      <div>
+        <small>Dirección</small>
+        <address>Calle Principal,<br>La Vega,<br>República Dominicana</address>
+      </div>
+      <div class="acciones">
+        <a class="btn btn-amber" href="https://www.google.com/maps/search/?api=1&amp;query=La%20Vega%2C%20Rep%C3%BAblica%20Dominicana" target="_blank" rel="noopener">Ver La Vega en el mapa</a>
+        <a class="btn btn-ghost" href="tel:+18492674546">Llamar al desarrollador</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a href="#inicio" class="wordmark">Amor <span>y</span> Café</a>
+      <p class="mt-06">Cafetería ficticia creada como demostración. Café y pan del día en La Vega.</p>
+    </div>
+    <nav aria-label="Contacto">
+      <a href="#" id="wa-footer" target="_blank" rel="noopener">WhatsApp</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="barra" id="barra">
+  <button type="button" id="abrir-pedido" aria-haspopup="dialog">
+    <span class="cuenta" id="cuenta">0</span>
+    <span>Ver mi pedido</span>
+    <span class="total" id="barra-total">RD$ 0</span>
+  </button>
+</div>
+
+<dialog id="dlg-opciones" aria-labelledby="op-titulo">
+  <form method="dialog" class="dlg" id="form-opciones">
+    <div class="dlg-head"><h3 id="op-titulo">Opciones</h3><button class="cerrar" value="cancel" aria-label="Cerrar">×</button></div>
+    <div class="dlg-body" id="op-body"></div>
+    <div class="dlg-foot"><button type="button" class="btn btn-pothos" id="op-agregar">Agregar al pedido</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlg-pedido" aria-labelledby="pd-titulo">
+  <form method="dialog" class="dlg" id="form-pedido">
+    <div class="dlg-head"><h3 id="pd-titulo">Tu pedido</h3><button class="cerrar" value="cancel" aria-label="Cerrar">×</button></div>
+    <div class="dlg-body">
+      <div id="lineas" class="lineas"></div>
+      <p class="recoger">Pedido para recoger en la cafetería.</p>
+      <div class="campo"><label for="f-nombre">Tu nombre</label><input id="f-nombre" autocomplete="name" maxlength="80" required></div>
+      <div class="campo"><label for="f-nota">Nota para la cocina (opcional)</label><textarea id="f-nota" maxlength="300" placeholder="Sin cebolla, poca azúcar…"></textarea></div>
+      <p class="error" id="err" role="alert" hidden></p>
+    </div>
+    <div class="dlg-foot">
+      <div class="total-fila"><span>Total</span><span id="pd-total">RD$ 0</span></div>
+      <button type="button" class="btn btn-pothos" id="enviar">Enviar pedido por WhatsApp</button>
+      <p class="aviso">Se abre WhatsApp con tu pedido escrito. Solo tienes que tocar enviar.</p>
+      <p class="aviso aviso-demo">Sitio de demostración: los pedidos llegan al desarrollador, no a la cafetería.</p>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="cafeteria.js"></script>
+</body>
+</html>

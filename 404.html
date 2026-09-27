@@ -2,38 +2,22 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<!-- Seguridad: solo se cargan recursos del propio sitio -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; form-action 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- GitHub Pages muestra este archivo en cualquier ruta que no exista (por ejemplo /a/b/c).
      La <base> hace que css/, img/ y js/ carguen desde la raíz del sitio a cualquier profundidad.
-     Si publicas en usuario.github.io/NOMBRE-DEL-REPO/, cambia href="/" por href="/NOMBRE-DEL-REPO/". -->
+     Para verla en local, usa un servidor (python -m http.server) en vez de abrir el archivo. -->
 <base href="/">
-<script>
-  // Abierta directamente (archivo local o .../404.html): las rutas se resuelven junto a este archivo
-  if (location.protocol === 'file:' || /\/404\.html$/.test(location.pathname)) {
-    document.querySelector('base').href = location.href;
-  }
-</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Página no encontrada · César Valenzuela</title>
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" type="image/png" href="img/favicon-64.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-<!-- Aplica el tema antes de pintar para evitar parpadeos -->
-<script>
-  (function () {
-    var t;
-    try { t = localStorage.getItem('theme'); } catch (e) {}
-    if (t !== 'light' && t !== 'dark') {
-      t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    document.documentElement.setAttribute('data-theme', t);
-    // Con JS activo, las animaciones de entrada pueden ocultar contenido hasta mostrarlo
-    document.documentElement.classList.add('js');
-  })();
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="js/theme-init.js"></script>
+<link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/cormorant-garamond.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>

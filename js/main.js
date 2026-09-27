@@ -163,6 +163,13 @@ function noirEmail() {
   return ['cesarvalenzuela1997', 'gmail.com'].join('@');
 }
 
+// Botón de correo de Contacto: oculto en el HTML, se completa y se muestra aquí
+const contactEmail = document.querySelector('.contact-email');
+if (contactEmail) {
+  contactEmail.href = 'mailto:' + noirEmail();
+  contactEmail.hidden = false;
+}
+
 function openWhatsApp(text) {
   const url = 'https://wa.me/' + NOIR_WHATSAPP + '?text=' + encodeURIComponent(text);
   window.open(url, '_blank', 'noopener');

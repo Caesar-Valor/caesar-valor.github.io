@@ -1,3 +1,17 @@
+/* ===== Fuentes (alojadas en el sitio: fonts/, solo latín y los pesos que se usan) ===== */
+@font-face {
+  font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 600 700; font-display: swap;
+  src: url(../fonts/cormorant-garamond.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 400 600; font-display: swap;
+  src: url(../fonts/inter.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url(../fonts/jetbrains-mono.woff2) format('woff2');
+}
+
 /* ===== Temas: día (por defecto) y noche ===== */
 :root {
   --bg: #EDE3D1;
@@ -451,6 +465,13 @@ main > section + section::after {
   border-radius: 999px;
   transition: width 1.2s cubic-bezier(.2,.7,.2,1);
 }
+/* Nivel de cada barra: data-level en el HTML (la CSP no permite atributos style) */
+.bar i[data-level="45"] { --level: 45%; }
+.bar i[data-level="60"] { --level: 60%; }
+.bar i[data-level="65"] { --level: 65%; }
+.bar i[data-level="70"] { --level: 70%; }
+.bar i[data-level="80"] { --level: 80%; }
+.bar i[data-level="85"] { --level: 85%; }
 
 /* ===== Contacto ===== */
 .contact .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
@@ -473,6 +494,10 @@ input, textarea {
 input:focus, textarea:focus { outline: none; border-color: var(--accent); }
 textarea { min-height: 140px; resize: vertical; }
 form .btn { justify-self: start; cursor: pointer; }
+/* Campo trampa anti-spam (_gotcha de Formspree): fuera de pantalla para personas, visible para bots */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+/* Correo de contacto: oculto sin JavaScript, main.js lo arma y lo muestra */
+.contact-email[hidden] { display: none; }
 
 /* ===== Botones flotantes: WhatsApp + asistente de Noir =====
    Por debajo de la navegación (z-index 50), para no tapar el menú móvil abierto */
