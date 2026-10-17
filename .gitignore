@@ -2,3 +2,17 @@ img/originales/
 img/poses.png
 img/poses2.png
 NOTAS.md
+
+# Configuración local y secretos
+.mcp.json
+.env
+.env.*
+.dev.vars
+.dev.vars.*
+
+# Worker de Noir: dependencias y estado local de wrangler
+noir-worker/node_modules/
+noir-worker/.wrangler/
+
+# Originales de las capturas del sistema de cobro (solo se publican las elegidas, en img/)
+capturas de sistema de facturacion/

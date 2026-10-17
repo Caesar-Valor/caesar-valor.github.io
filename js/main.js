@@ -47,29 +47,9 @@ if (btn && links) {
   }));
 }
 
-// Barras de habilidades: se llenan al llegar a la sección
-const skills = document.querySelector('.skills');
-if (skills) new IntersectionObserver((entries, obs) => {
-  if (entries[0].isIntersecting) { skills.classList.add('visible'); obs.disconnect(); }
-}, { threshold: 0.3 }).observe(skills);
-
+// La entrada de las secciones y las barras de habilidades las anima js/motion.js
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const canObserve = 'IntersectionObserver' in window;
-
-// Secciones: aparición suave una sola vez al entrar en pantalla
-const revealSections = document.querySelectorAll('main > section:not(.hero)');
-if (canObserve) {
-  const revealObs = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('is-visible');
-      obs.unobserve(entry.target);
-    });
-  }, { rootMargin: '0px 0px -10% 0px' });
-  revealSections.forEach(section => revealObs.observe(section));
-} else {
-  revealSections.forEach(section => section.classList.add('is-visible'));
-}
 
 // Línea de tiempo: la línea se dibuja y cada punto se enciende cuando la línea lo alcanza
 const journey = document.querySelector('.journey');
@@ -112,6 +92,35 @@ if (floatGroup && contacto && canObserve) {
     contactoVisible = entries[0].isIntersecting;
     updateFloatGroup();
   }, { threshold: 0 }).observe(contacto);
+}
+
+// Proyectos: filtros por tipo. Cada expediente lleva sus tipos en data-cat ("web personal").
+// Sin JavaScript los filtros siguen ocultos y se ven todos los proyectos.
+const filtros = document.querySelector('.filtros');
+if (filtros) {
+  const expedientes = [...document.querySelectorAll('.expediente')];
+  const filtroBtns = [...filtros.querySelectorAll('.filtro')];
+  const filtroEstado = document.querySelector('.filtros-estado');
+  const coincide = (exp, filtro) => filtro === 'todos' || exp.dataset.cat.split(' ').includes(filtro);
+
+  filtroBtns.forEach(b => {
+    b.querySelector('.filtro-n').textContent = expedientes.filter(exp => coincide(exp, b.dataset.filtro)).length;
+    b.addEventListener('click', () => aplicarFiltro(b.dataset.filtro));
+  });
+
+  function aplicarFiltro(filtro) {
+    filtroBtns.forEach(b => b.setAttribute('aria-pressed', b.dataset.filtro === filtro));
+    expedientes.forEach(exp => { exp.hidden = !coincide(exp, filtro); });
+    // Lado alterno y último sin borde, contando solo los visibles
+    const visibles = expedientes.filter(exp => !exp.hidden);
+    visibles.forEach((exp, i) => {
+      exp.classList.toggle('flip', i % 2 === 1);
+      exp.classList.toggle('is-last', i === visibles.length - 1);
+    });
+    filtroEstado.textContent = 'Mostrando ' + visibles.length + (visibles.length === 1 ? ' proyecto' : ' proyectos');
+    document.dispatchEvent(new CustomEvent('proyectos:filtrados', { detail: visibles }));  // js/motion.js los anima
+  }
+  filtros.hidden = false;
 }
 
 /* ===== Asistente de Noir =====

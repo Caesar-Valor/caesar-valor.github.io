@@ -118,10 +118,10 @@ main > section + section::after {
   font-weight: 600; font-size: .98rem;
   text-decoration: none;
   border: 1px solid transparent;
-  transition: background .2s, color .2s, border-color .2s, transform .2s;
+  transition: background .2s, color .2s, border-color .2s;
 }
 .btn-primary { background: var(--accent); color: var(--on-accent); }
-.btn-primary:hover { background: color-mix(in srgb, var(--accent) 85%, var(--text)); transform: translateY(-2px); }
+.btn-primary:hover { background: color-mix(in srgb, var(--accent) 85%, var(--text)); }
 .btn-ghost { border-color: var(--gold); color: var(--text); }
 .btn-ghost:hover { background: color-mix(in srgb, var(--gold) 12%, transparent); }
 .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
@@ -325,8 +325,10 @@ main > section + section::after {
   padding: 3rem 0;
   border-bottom: 1px solid var(--border);
 }
-.expediente:last-child { border-bottom: 0; padding-bottom: 0; }
-.expediente:nth-of-type(even) { grid-template-columns: 1fr 1.1fr; grid-template-areas: "body shot" "body ficha"; }
+/* .flip (lado alterno) y .is-last van en el HTML y main.js los recalcula al filtrar */
+.expediente[hidden] { display: none; }
+.expediente.is-last { border-bottom: 0; padding-bottom: 0; }
+.expediente.flip { grid-template-columns: 1fr 1.1fr; grid-template-areas: "body shot" "body ficha"; }
 .expediente > .shot { grid-area: shot; align-self: start; }
 .expediente-body { grid-area: body; }
 .ficha { grid-area: ficha; align-self: start; }
@@ -341,9 +343,9 @@ main > section + section::after {
   overflow: hidden;
   display: flex; flex-direction: column;
   box-shadow: var(--shadow-md);
-  transition: transform .3s ease, box-shadow .3s ease;
+  transition: box-shadow .3s ease;
 }
-.shot:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.shot:hover { box-shadow: var(--shadow-lg); }
 .shot-bar { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--bg); }
 .shot-bar span { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
 .shot-body { flex: 1; padding: 1.2rem; display: grid; gap: .7rem; align-content: start; }
@@ -362,9 +364,30 @@ main > section + section::after {
 .caso-bloque p { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 60ch; }
 .project-links { display: flex; flex-wrap: wrap; gap: 1rem; }
 
+/* Filtros de Proyectos (ocultos sin JavaScript: main.js los muestra) */
+.filtros { display: flex; flex-wrap: wrap; gap: .5rem; margin: -1.5rem 0 1rem; }
+.filtros[hidden] { display: none; }
+.filtro {
+  display: inline-flex; align-items: center; gap: .45rem;
+  min-height: 44px; padding: .5rem 1rem;
+  font: 500 .92rem var(--font-body); color: var(--muted);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+  cursor: pointer;
+  transition: color .2s, border-color .2s, background-color .2s;
+}
+.filtro:hover { color: var(--text); border-color: var(--gold); }
+.filtro:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.filtro[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.filtro-n { font-family: var(--font-mono); font-size: .78rem; opacity: .8; }
+/* Solo para lectores de pantalla */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
 /* Imagen real dentro del marco de navegador */
 .shot-img { aspect-ratio: auto; margin: 0; }
 .shot-img img { width: 100%; height: auto; }
+/* Dos capturas pequeñas debajo de la principal (sistema de cobro) */
+.shot-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
+.shot-strip img { display: block; }
 
 /* Ficha técnica */
 .ficha {
@@ -463,7 +486,6 @@ main > section + section::after {
   display: block; height: 100%; width: var(--level);
   background: linear-gradient(90deg, var(--accent), var(--gold));
   border-radius: 999px;
-  transition: width 1.2s cubic-bezier(.2,.7,.2,1);
 }
 /* Nivel de cada barra: data-level en el HTML (la CSP no permite atributos style) */
 .bar i[data-level="45"] { --level: 45%; }
@@ -514,9 +536,9 @@ form .btn { justify-self: start; cursor: pointer; }
   border-radius: 50%;
   background: var(--accent); color: var(--on-accent);
   box-shadow: 0 2px 6px rgba(31, 26, 23, .18), 0 10px 24px -8px rgba(31, 26, 23, .45);
-  transition: background-color .2s ease, transform .2s ease;
+  transition: background-color .2s ease;
 }
-.wa-float:hover { background: color-mix(in srgb, var(--accent) 85%, var(--text)); transform: translateY(-2px); }
+.wa-float:hover { background: color-mix(in srgb, var(--accent) 85%, var(--text)); }
 .wa-float:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; border-radius: 50%; }
 .wa-float svg { width: 28px; height: 28px; }
 
@@ -529,10 +551,9 @@ form .btn { justify-self: start; cursor: pointer; }
   border: 1px solid var(--gold);
   box-shadow: 0 2px 6px rgba(31, 26, 23, .16), 0 8px 18px -8px rgba(31, 26, 23, .4);
   cursor: pointer;
-  transition: transform .2s ease, border-color .2s ease;
+  transition: border-color .2s ease;
 }
 .noir-toggle[hidden] { display: none; }
-.noir-toggle:hover { transform: translateY(-2px); }
 .noir-toggle[aria-expanded="true"] { border-color: var(--accent); }
 .noir-toggle:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; border-radius: 50%; }
 .noir-toggle svg { width: 24px; height: 24px; }
@@ -713,13 +734,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   /* Cambio de paso: el contenido entra suave */
   .noir-body.is-changing > * { animation: noir-in .22s cubic-bezier(.2, .7, .2, 1); }
 
-  /* Secciones: aparecen una sola vez al entrar en pantalla */
-  .js main > section:not(.hero) > .wrap {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1);
-  }
-  .js main > section.is-visible > .wrap { opacity: 1; transform: none; }
+  /* La entrada de las secciones y las barras de habilidades las anima js/motion.js */
 
   /* Línea de tiempo: la línea se dibuja y cada punto se enciende al alcanzarlo */
   .js .timeline::before { transform: scaleY(0); transition: transform 1.6s linear .3s; }
@@ -729,10 +744,16 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
     transition-delay: calc(.3s + var(--dot-delay, 0s));
   }
   .js .journey:not(.is-drawn) .timeline li::before { background: var(--bg); box-shadow: 0 0 0 0 transparent; }
+}
 
-  /* Barras de habilidades: se llenan al llegar a la sección */
-  .bar i { transition: width 1.2s cubic-bezier(.2, .7, .2, 1); }
-  .js .skills:not(.visible) .bar i { width: 0; }
+/* Respaldo si js/motion.js no carga: el hover eleva con CSS.
+   Con Motion (clase .motion en <html>) lo anima el módulo, y el CSS no debe tener
+   transición de transform, porque frenaría cada cuadro de la animación. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  html:not(.motion) :is(.btn-primary, .wa-float, .noir-toggle) { transition-property: background, background-color, color, border-color, transform; }
+  html:not(.motion) .shot { transition-property: box-shadow, transform; }
+  html:not(.motion) :is(.btn-primary, .wa-float, .noir-toggle):hover { transform: translateY(-2px); }
+  html:not(.motion) .shot:hover { transform: translateY(-4px); }
 }
 
 /* Láminas: se elevan y el marco dorado brilla un poco (solo con mouse) */
@@ -771,7 +792,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   .hero-work { justify-self: start; max-width: 440px; margin-top: .5rem; padding-left: 7%; }  /* la base de la laptop no toca el borde */
   .skills-grid { grid-template-columns: 1fr 1fr; }
   .expediente,
-  .expediente:nth-of-type(even) { grid-template-columns: 1fr; grid-template-areas: "shot" "body" "ficha"; grid-template-rows: auto; }
+  .expediente.flip { grid-template-columns: 1fr; grid-template-areas: "shot" "body" "ficha"; grid-template-rows: auto; }
   .contact .wrap { grid-template-columns: 1fr; gap: 3rem; }
   .journey-grid { gap: 3rem; }
   .steps { grid-template-columns: repeat(2, 1fr); }

@@ -157,14 +157,101 @@
   <div class="wrap">
     <h2>Proyectos</h2>
     <p class="section-intro">Trabajos reales y demos. Las capturas usan datos de prueba.</p>
+    <!-- Filtros: cada expediente lleva sus tipos en data-cat. Sin JavaScript no se muestran y se ven todos -->
+    <div class="filtros" role="group" aria-label="Filtrar proyectos por tipo" hidden>
+      <button type="button" class="filtro" data-filtro="todos" aria-pressed="true">Todos <span class="filtro-n"></span></button>
+      <button type="button" class="filtro" data-filtro="web" aria-pressed="false">Páginas web <span class="filtro-n"></span></button>
+      <button type="button" class="filtro" data-filtro="sistemas" aria-pressed="false">Sistemas y APIs <span class="filtro-n"></span></button>
+      <button type="button" class="filtro" data-filtro="seguridad" aria-pressed="false">Seguridad <span class="filtro-n"></span></button>
+      <button type="button" class="filtro" data-filtro="personal" aria-pressed="false">Personales <span class="filtro-n"></span></button>
+    </div>
+    <p class="filtros-estado sr-only" aria-live="polite"></p>
 
-    <article class="expediente">
+    <!-- Casos reales de un mismo cliente: el texto no lo nombra, pero la demo de la web sí (ver NOTAS.md) -->
+    <article class="expediente" data-cat="web">
+      <figure class="shot shot-img">
+        <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+        <img src="img/demo-web-carta.webp" alt="Carta del restaurante en la web: secciones, filtros por tipo de comida y platos con precio por tamaño" width="1200" height="749" loading="lazy">
+      </figure>
+      <div class="expediente-body">
+        <p class="expediente-num">Expediente 01 · Caso real</p>
+        <h3>Web para clínica de nutrición y restaurante saludable</h3>
+        <div class="caso">
+          <div class="caso-bloque">
+            <h4>El problema</h4>
+            <p>Un negocio de La Vega que reúne consulta de nutrición, restaurante saludable y un estudio de barre y pilates necesitaba presentar sus tres servicios en un solo sitio y recibir pedidos sin errores.</p>
+          </div>
+          <div class="caso-bloque">
+            <h4>La solución</h4>
+            <p>Una web de varias páginas con la carta completa, filtros por tipo de comida (alto en proteína, keto, sin gluten, ligero) y un pedido que se arma en la web y llega completo por WhatsApp. Incluye planes, consulta nutricional, un panel de demostración para cambiar el plato de la semana o marcar platos agotados sin tocar código, y una sección del estudio con su horario y reservas de demostración por lugar en la sala.</p>
+          </div>
+          <div class="caso-bloque">
+            <h4>Mi aporte</h4>
+            <p>Diseño y desarrollo completo, con modo oscuro, animaciones que respetan la opción de reducir movimiento y datos estructurados para buscadores.</p>
+          </div>
+        </div>
+        <div class="project-links">
+          <a href="https://caesar-valor.github.io/nutribel/index.html" class="btn btn-primary" target="_blank" rel="noopener">Ver demo</a>
+        </div>
+      </div>
+      <aside class="ficha" aria-label="Ficha técnica: Web para clínica de nutrición y restaurante saludable">
+        <p class="ficha-title">Ficha técnica</p>
+        <dl>
+          <div><dt>Tecnologías</dt><dd><ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Motion</li><li>SEO</li></ul></dd></div>
+          <div><dt>Estado</dt><dd>Entregada · en revisión con el cliente</dd></div>
+          <div><dt>Mi rol</dt><dd>Diseño y desarrollo completo</dd></div>
+        </dl>
+      </aside>
+    </article>
+
+    <article class="expediente flip" data-cat="sistemas">
+      <figure class="shot shot-img">
+        <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+        <img src="img/demo-cobro-cuenta.webp" alt="Cuenta de una mesa en el sistema de cobro: platos con notas, estado de cada uno, ITBIS, propina legal y total" width="1200" height="806" loading="lazy">
+        <div class="shot-strip">
+          <img src="img/demo-cobro-cocina.webp" alt="Pantalla de cocina con la comanda de una mesa en preparación" width="640" height="430" loading="lazy">
+          <img src="img/demo-cobro-dividir.webp" alt="Cuenta de una mesa dividida en dos, plato por plato" width="640" height="430" loading="lazy">
+        </div>
+      </figure>
+      <div class="expediente-body">
+        <p class="expediente-num">Expediente 02 · Caso real</p>
+        <h3>Sistema de cobro para restaurante</h3>
+        <div class="caso">
+          <div class="caso-bloque">
+            <h4>El problema</h4>
+            <p>El mismo restaurante necesitaba llevar en un solo sistema las mesas, las comandas a cocina y bar, el cobro y el cuadre de caja.</p>
+          </div>
+          <div class="caso-bloque">
+            <h4>La solución</h4>
+            <p>Un sistema de punto de venta con plano de mesas, comandas que llegan a la pantalla de cocina y bar, cuentas que se dividen por plato, por persona o en partes iguales, y cobro en efectivo, tarjeta, transferencia o mixto con ITBIS y propina legal. Incluye cuadre de caja a ciegas con aprobación del supervisor, ventas a crédito, registro de horas del personal y reportes de ventas que se exportan a Excel.</p>
+          </div>
+          <div class="caso-bloque">
+            <h4>Mi aporte</h4>
+            <p>Desarrollo completo. Cada rol (camarero, cajero, supervisor, cocina y administrador) entra con su PIN y solo ve lo que le corresponde, y el panel de administración pide verificación en dos pasos.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="ficha" aria-label="Ficha técnica: Sistema de cobro para restaurante">
+        <p class="ficha-title">Ficha técnica</p>
+        <dl>
+          <div><dt>Tecnologías</dt><dd><ul class="tags"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>Punto de venta</li></ul></dd></div>
+          <div><dt>Estado</dt><dd>Piloto en el local</dd></div>
+          <div><dt>Mi rol</dt><dd>Desarrollo completo</dd></div>
+        </dl>
+        <p class="ficha-nota">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          Demo privada: proyecto para cliente
+        </p>
+      </aside>
+    </article>
+
+    <article class="expediente" data-cat="web">
       <figure class="shot shot-img">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <img src="img/demo-cafeteria.webp" alt="Captura de la web de Amor y Café, cafetería de demostración" width="1200" height="526" loading="lazy">
       </figure>
       <div class="expediente-body">
-        <p class="expediente-num">Expediente 01</p>
+        <p class="expediente-num">Expediente 03</p>
         <h3>Web y menú digital para cafetería</h3>
         <div class="caso">
           <div class="caso-bloque">
@@ -194,13 +281,13 @@
       </aside>
     </article>
 
-    <article class="expediente">
+    <article class="expediente flip" data-cat="seguridad">
       <figure class="shot shot-img">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <img src="img/demo-forensicshield.webp" alt="Captura de ForensicShield Lite" width="1200" height="592" loading="lazy">
       </figure>
       <div class="expediente-body">
-        <p class="expediente-num">Expediente 02</p>
+        <p class="expediente-num">Expediente 04</p>
         <h3>ForensicShield Lite</h3>
         <div class="caso">
           <div class="caso-bloque">
@@ -230,13 +317,13 @@
       </aside>
     </article>
 
-    <article class="expediente">
+    <article class="expediente" data-cat="sistemas">
       <figure class="shot shot-img">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <img src="img/demo-evs.webp" alt="Captura de la API de comprobantes electrónicos con datos de prueba" width="1200" height="459" loading="lazy">
       </figure>
       <div class="expediente-body">
-        <p class="expediente-num">Expediente 03</p>
+        <p class="expediente-num">Expediente 05</p>
         <h3>API de comprobantes electrónicos</h3>
         <div class="caso">
           <div class="caso-bloque">
@@ -267,7 +354,7 @@
       </aside>
     </article>
 
-    <article class="expediente">
+    <article class="expediente flip" data-cat="sistemas">
       <div class="shot" aria-hidden="true">
         <div class="shot-bar"><span></span><span></span><span></span></div>
         <div class="shot-body">
@@ -278,7 +365,7 @@
         <div class="shot-note">Captura próximamente</div>
       </div>
       <div class="expediente-body">
-        <p class="expediente-num">Expediente 04</p>
+        <p class="expediente-num">Expediente 06</p>
         <h3>Sistema de gestión de turnos</h3>
         <div class="caso">
           <div class="caso-bloque">
@@ -305,6 +392,80 @@
         <p class="ficha-nota">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
           Demo privada: proyecto para cliente
+        </p>
+      </aside>
+    </article>
+
+    <article class="expediente" data-cat="web personal">
+      <figure class="shot shot-img">
+        <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+        <img src="img/demo-cartelera.webp" alt="Portada de la Cartelera misteriosa: cinco puertas en arco, una por cada noche de octubre" width="1200" height="750" loading="lazy">
+      </figure>
+      <div class="expediente-body">
+        <p class="expediente-num">Expediente 07 · Personal</p>
+        <h3>Cartelera misteriosa: noches de octubre</h3>
+        <div class="caso">
+          <div class="caso-bloque">
+            <h4>La idea</h4>
+            <p>Anunciar el plan de cinco noches de películas de octubre con una página que se descubre poco a poco, en lugar de un simple mensaje.</p>
+          </div>
+          <div class="caso-bloque">
+            <h4>La solución</h4>
+            <p>Cada noche es una puerta que se abre con un giro en 3D y revela una adivinanza sobre la película. Cada puerta tiene su propio efecto (murciélagos, gotas carmesí, chispas de luz), con brasas que flotan en el fondo y música que se puede silenciar. Cada semana se abre una noche nueva, y con la opción de reducir movimiento las animaciones se apagan.</p>
+          </div>
+          <div class="caso-bloque">
+            <h4>Mi aporte</h4>
+            <p>Diseño y desarrollo completo, sin frameworks ni compilación.</p>
+          </div>
+        </div>
+        <div class="project-links">
+          <a href="https://caesar-valor.github.io/cartelera/" class="btn btn-primary" target="_blank" rel="noopener">Ver demo</a>
+        </div>
+      </div>
+      <aside class="ficha" aria-label="Ficha técnica: Cartelera misteriosa">
+        <p class="ficha-title">Ficha técnica</p>
+        <dl>
+          <div><dt>Tecnologías</dt><dd><ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Canvas</li><li>Web Animations API</li></ul></dd></div>
+          <div><dt>Estado</dt><dd>En curso (octubre de 2026)</dd></div>
+          <div><dt>Mi rol</dt><dd>Proyecto personal</dd></div>
+        </dl>
+      </aside>
+    </article>
+
+    <!-- Sin enlace: la invitación publicada tiene el nombre, el lugar y el WhatsApp de la anfitriona (ver NOTAS.md) -->
+    <article class="expediente flip is-last" data-cat="web personal">
+      <figure class="shot shot-img">
+        <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+        <img src="img/demo-invitacion.webp" alt="Inicio de la invitación: una piñata frente a un telón rojo y el aviso «Dale 3 toques a la piñata»" width="1200" height="750" loading="lazy">
+      </figure>
+      <div class="expediente-body">
+        <p class="expediente-num">Expediente 08 · Personal</p>
+        <h3>Invitación digital animada para una fiesta sorpresa</h3>
+        <div class="caso">
+          <div class="caso-bloque">
+            <h4>La idea</h4>
+            <p>Una invitación que se comparte por enlace y que, al abrirla, se sienta como parte de la fiesta.</p>
+          </div>
+          <div class="caso-bloque">
+            <h4>La solución</h4>
+            <p>Antes de ver la tarjeta, el invitado rompe una piñata con tres toques y se abre el telón. Tiene cuenta regresiva hasta la fiesta, música con botón de pausa, confeti, un mapa con botones para Google Maps y Waze, y la confirmación de asistencia abre WhatsApp con el mensaje ya escrito.</p>
+          </div>
+          <div class="caso-bloque">
+            <h4>Mi aporte</h4>
+            <p>Diseño y desarrollo completo en una sola página, sin instalación ni dependencias.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="ficha" aria-label="Ficha técnica: Invitación digital animada">
+        <p class="ficha-title">Ficha técnica</p>
+        <dl>
+          <div><dt>Tecnologías</dt><dd><ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>WhatsApp</li></ul></dd></div>
+          <div><dt>Estado</dt><dd>Publicada</dd></div>
+          <div><dt>Mi rol</dt><dd>Proyecto personal</dd></div>
+        </dl>
+        <p class="ficha-nota">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          Sin enlace público: tiene datos privados del evento
         </p>
       </aside>
     </article>
@@ -478,5 +639,6 @@
 </div>
 
 <script src="js/main.js"></script>
+<script type="module" src="js/motion.js"></script>
 </body>
 </html>
