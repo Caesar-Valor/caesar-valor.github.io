@@ -55,7 +55,6 @@ Proyectos (sección Proyectos del sitio):
 - Expediente 05: API de comprobantes electrónicos como freelance: API REST con JWT, Node.js, Express y Knex. Backend completo, frontend en desarrollo. Demo privada.
 - Expediente 06: sistema de gestión de turnos multi-negocio (pasantía, en equipo): backend con 8 módulos y 40 endpoints, JWT, bcrypt, Zod, límite de intentos; Next.js, Express, Prisma, PostgreSQL. Demo privada.
 - Expediente 07, personal: "Cartelera misteriosa", página de cinco noches de películas de octubre con puertas en 3D y adivinanzas. Tiene demo.
-- Expediente 08, personal: invitación digital animada para una fiesta sorpresa (piñata, cuenta regresiva, mapa, confirmación por WhatsApp). Sin enlace público.
 
 Habilidades: Python y FastAPI (avanzado), HTML y CSS (avanzado), Node.js y Express, SQL/Prisma/Knex, JavaScript y TypeScript, React y Next.js, Git, Linux (intermedio), ciberseguridad (en formación).
 
