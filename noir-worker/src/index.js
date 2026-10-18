@@ -31,12 +31,9 @@ export default {
     if (!messages) return json({ error: 'input' }, 400, cors);
 
     try {
-      const result = await env.AI.run(MODEL, {
-        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
-        max_tokens: MAX_TOKENS,
-        temperature: 0.4
-      });
-      const reply = typeof result.response === 'string' ? result.response.trim() : '';
+      let reply = await askModel(env, messages);
+      // A veces el modelo devuelve caracteres rotos (U+FFFD) en las tildes: se pide otra vez una sola vez
+      if (reply.includes('�')) reply = (await askModel(env, messages)) || reply;
       if (!reply) return json({ error: 'model' }, 502, cors);
       return json({ reply }, 200, cors);
     } catch (e) {
@@ -45,6 +42,15 @@ export default {
     }
   }
 };
+
+async function askModel(env, messages) {
+  const result = await env.AI.run(MODEL, {
+    messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
+    max_tokens: MAX_TOKENS,
+    temperature: 0.4
+  });
+  return typeof result.response === 'string' ? result.response.trim() : '';
+}
 
 // Valida el cuerpo: solo roles user/assistant, texto corto, y el último mensaje del visitante.
 // El visitante nunca puede enviar un mensaje "system".
