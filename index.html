@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <!-- Seguridad: solo se cargan recursos del propio sitio; el formulario solo envía a Formspree -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; form-action https://formspree.io; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src https://*.workers.dev; form-action https://formspree.io; base-uri 'none'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cesar Valenzuela · Desarrollador Python</title>
@@ -630,11 +630,21 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
   </header>
-  <!-- El mensaje y las opciones de cada paso los pinta main.js; aria-live anuncia el mensaje al cambiar de paso -->
+  <!-- main.js pinta el mensaje y las opciones de cada paso y, con el chat activo, las burbujas de la conversación -->
   <div class="noir-body">
-    <p class="noir-msg" aria-live="polite">Hola, soy Noir. Estoy aquí para ayudarte. ¿Qué necesitas?</p>
+    <div class="noir-log" role="log" aria-live="polite">
+      <p class="noir-msg noir-step-msg">Hola, soy Noir. Estoy aquí para ayudarte. ¿Qué necesitas?</p>
+    </div>
     <div class="noir-options"></div>
   </div>
+  <!-- Chat con IA: oculto hasta que main.js tenga la URL del Worker (NOIR_API) -->
+  <form class="noir-form" hidden>
+    <label class="sr-only" for="noir-input">Escribe tu pregunta para Noir</label>
+    <input id="noir-input" class="noir-input" type="text" maxlength="600" autocomplete="off" placeholder="Escribe tu pregunta…">
+    <button class="noir-send" type="submit" aria-label="Enviar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </form>
   <p class="noir-foot">Respondo personalmente por WhatsApp en menos de 24 horas.</p>
 </div>
 

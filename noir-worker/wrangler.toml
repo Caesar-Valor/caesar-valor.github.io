@@ -1,0 +1,21 @@
+name = "noir"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Workers AI: el modelo se elige en src/index.js (MODEL)
+[ai]
+binding = "AI"
+
+# Orígenes que pueden llamar al Worker (separados por coma)
+[vars]
+ALLOWED_ORIGINS = "https://caesar-valor.github.io,http://localhost:8000,http://127.0.0.1:8000"
+
+# Límite por IP: 10 mensajes por minuto. namespace_id es un número cualquiera,
+# único dentro de tu cuenta.
+[[ratelimits]]
+name = "NOIR_LIMIT"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 10
+  period = 60
