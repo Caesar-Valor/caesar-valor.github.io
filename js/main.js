@@ -124,11 +124,14 @@ if (filtros) {
 }
 
 /* ===== Asistente de Noir =====
-   Hoy es un menú guiado por pasos. Para pasar a un chat con IA más adelante:
-   - NOIR_STEPS, renderNoirStep() y runNoirOption() son lo único que cambia (se
-     sustituyen por un campo de texto que envíe los mensajes al backend y pinte
-     las respuestas como burbujas .noir-msg).
+   Menú guiado por pasos y, si NOIR_API tiene la URL del Worker (noir-worker/),
+   un chat con IA debajo. Al escribir el primer mensaje, el menú se cambia por
+   atajos (WhatsApp y Ver proyectos). Si el Worker falla, el chat se oculta y
+   vuelve el menú de siempre.
    - Abrir, cerrar, foco, Esc y el globito de saludo no dependen de los pasos. */
+const NOIR_API = 'https://noir.noir-worker.workers.dev';  // debe caber en connect-src de la CSP
+const NOIR_TIMEOUT = 20000;
+const NOIR_MAX_HISTORY = 8;  // últimos mensajes que se envían (el Worker acepta hasta 12 y 16 KB)
 const NOIR_WHATSAPP = '18492674546';
 const NOIR_HINT_KEY = 'noir-hint-shown';  // sessionStorage: el saludo sale una vez por sesión
 const NOIR_HINT_DELAY = 6000;
@@ -227,7 +230,7 @@ function renderNoirStep(stepId, moveFocus) {
   const list = noirPanel.querySelector('.noir-options');
 
   noirPanel.dataset.step = stepId;
-  noirPanel.querySelector('.noir-msg').textContent = step.message;
+  noirPanel.querySelector('.noir-step-msg').textContent = step.message;
   list.replaceChildren(...step.options.map(createNoirOption));
 
   if (step.back) {
@@ -246,6 +249,130 @@ function renderNoirStep(stepId, moveFocus) {
   body.scrollTop = 0;
 
   if (moveFocus) list.querySelector('.noir-option').focus();
+}
+
+/* --- Chat con IA --- */
+const NOIR_SHORTCUTS = [
+  { label: 'Escribir por WhatsApp', action: 'whatsapp', text: 'Hola César, vi tu portafolio y quisiera hablar contigo sobre un proyecto.' },
+  { label: 'Ver proyectos', action: 'section', target: 'proyectos' }
+];
+const noirHistory = [];  // { role: 'user' | 'assistant', content } solo en memoria
+let noirBusy = false;
+let noirFootText = '';  // pie original, para volver a él si el chat se apaga
+
+function noirChatting() {
+  return noirHistory.length > 0;
+}
+
+// Añade una burbuja al registro (siempre con textContent) y baja hasta ella
+function addNoirBubble(text, fromUser) {
+  const bubble = document.createElement('p');
+  bubble.className = fromUser ? 'noir-msg is-user' : 'noir-msg';
+  bubble.textContent = text;
+  noirPanel.querySelector('.noir-log').appendChild(bubble);
+  scrollNoirToEnd();
+  return bubble;
+}
+
+function scrollNoirToEnd() {
+  const body = noirPanel.querySelector('.noir-body');
+  body.scrollTo({ top: body.scrollHeight, behavior: reduceMotion ? 'auto' : 'smooth' });
+}
+
+// "Noir está escribiendo": tres puntos que el lector de pantalla no lee
+function showNoirTyping() {
+  const typing = document.createElement('p');
+  typing.className = 'noir-msg noir-typing';
+  typing.setAttribute('aria-hidden', 'true');
+  typing.append(document.createElement('span'), document.createElement('span'), document.createElement('span'));
+  noirPanel.querySelector('.noir-log').appendChild(typing);
+  scrollNoirToEnd();
+  return typing;
+}
+
+// Pide la respuesta al Worker; cualquier fallo (red, límite, modelo, tiempo) lanza un error
+async function fetchNoirReply() {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), NOIR_TIMEOUT);
+  try {
+    const res = await fetch(NOIR_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: noirHistory.slice(-NOIR_MAX_HISTORY) }),
+      signal: controller.signal
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || typeof data.reply !== 'string') throw new Error(data.error || 'http ' + res.status);
+    return data.reply;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// El Worker no responde: se apaga el chat y vuelve el menú por pasos
+function disableNoirChat(reason) {
+  const form = noirPanel.querySelector('.noir-form');
+  const rateLimited = reason === 'rate';
+  addNoirBubble(rateLimited
+    ? 'Recibí muchos mensajes seguidos. Espera un minuto o escríbele a Cesar por WhatsApp.'
+    : 'Ahora mismo no puedo responder. Escríbele a Cesar por WhatsApp y te contesta en menos de 24 horas.', false);
+  if (rateLimited) return;
+  form.hidden = true;
+  noirPanel.classList.remove('has-chat');
+  noirPanel.querySelector('.noir-foot').textContent = noirFootText;
+  noirPanel.querySelector('.noir-options').classList.remove('is-shortcuts');
+  renderNoirStep(NOIR_FIRST_STEP, false);
+  scrollNoirToEnd();
+}
+
+async function sendNoirMessage(text) {
+  const form = noirPanel.querySelector('.noir-form');
+  const input = form.querySelector('.noir-input');
+
+  if (!noirChatting()) {
+    // Primer mensaje: el menú por pasos se cambia por los atajos
+    noirPanel.querySelector('.noir-options').replaceChildren(...NOIR_SHORTCUTS.map(createNoirOption));
+    noirPanel.querySelector('.noir-options').classList.add('is-shortcuts');
+  }
+  addNoirBubble(text, true);
+  noirHistory.push({ role: 'user', content: text });
+
+  noirBusy = true;
+  input.value = '';
+  form.querySelector('.noir-send').disabled = true;
+  noirPanel.querySelector('.noir-log').setAttribute('aria-busy', 'true');
+  const typing = showNoirTyping();
+
+  try {
+    const reply = await fetchNoirReply();
+    typing.remove();
+    noirHistory.push({ role: 'assistant', content: reply });
+    addNoirBubble(reply, false);
+  } catch (e) {
+    typing.remove();
+    noirHistory.pop();  // el mensaje sin respuesta no se reenvía
+    disableNoirChat(e.message);
+  } finally {
+    noirBusy = false;
+    form.querySelector('.noir-send').disabled = false;
+    noirPanel.querySelector('.noir-log').removeAttribute('aria-busy');
+    if (noirIsOpen()) (form.hidden ? noirPanel.querySelector('.noir-option') : input).focus();
+  }
+}
+
+function initNoirChat() {
+  const form = noirPanel.querySelector('.noir-form');
+  if (!NOIR_API || !form || typeof fetch !== 'function') return;
+  form.hidden = false;
+  noirPanel.classList.add('has-chat');
+  noirFootText = noirPanel.querySelector('.noir-foot').textContent;
+  noirPanel.querySelector('.noir-foot').textContent = 'Noir usa IA y puede equivocarse. Cesar responde por WhatsApp en menos de 24 horas.';
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const text = form.querySelector('.noir-input').value.trim();
+    if (text && !noirBusy) sendNoirMessage(text);
+  });
 }
 
 // Recuerda en la sesión que el saludo ya salió (si el almacenamiento está bloqueado, no pasa nada)
@@ -281,7 +408,10 @@ function openNoir() {
   noirPanel.classList.add('is-open');
   updateFloatGroup();
   noirToggle.setAttribute('aria-expanded', 'true');
-  noirPanel.querySelector('.noir-option').focus();
+  // Con una conversación en curso, el foco vuelve al campo de texto
+  const input = noirPanel.querySelector('.noir-input');
+  if (noirChatting() && input && !input.closest('form').hidden) input.focus();
+  else noirPanel.querySelector('.noir-option').focus();
 }
 
 // returnFocus: al cerrar con X o Esc el foco vuelve a las patitas
@@ -290,7 +420,8 @@ function closeNoir(returnFocus) {
   noirPanel.hidden = true;
   noirPanel.classList.remove('is-open');
   noirToggle.setAttribute('aria-expanded', 'false');
-  renderNoirStep(NOIR_FIRST_STEP, false);  // la próxima vez empieza desde el primer paso
+  // La próxima vez empieza desde el primer paso; la conversación con IA se conserva
+  if (!noirChatting() || !noirPanel.classList.contains('has-chat')) renderNoirStep(NOIR_FIRST_STEP, false);
   updateFloatGroup();
   if (returnFocus) noirToggle.focus();
 }
@@ -298,6 +429,7 @@ function closeNoir(returnFocus) {
 function initNoir() {
   if (!noirToggle || !noirPanel) return;
   renderNoirStep(NOIR_FIRST_STEP, false);
+  initNoirChat();
   noirToggle.hidden = false;
 
   noirToggle.addEventListener('click', () => (noirIsOpen() ? closeNoir(true) : openNoir()));
