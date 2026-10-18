@@ -49,7 +49,19 @@ async function askModel(env, messages) {
     max_tokens: MAX_TOKENS,
     temperature: 0.4
   });
-  return typeof result.response === 'string' ? result.response.trim() : '';
+  return typeof result.response === 'string' ? repairAccents(result.response).trim() : '';
+}
+
+// El modelo a veces pierde el primer byte de una letra con tilde: "í" (C3 AD) llega como U+FFFD + U+00AD.
+// Las tildes del español y el francés empiezan todas por C3, así que se reconstruyen con el segundo byte.
+// Excepciones: BF es "¿" (C2 BF) y A1 es "¡" (C2 A1) al inicio de palabra o "á" (C3 A1) dentro de ella.
+function repairAccents(text) {
+  return text.replace(/�([\u0080-¿])/g, (match, cont, offset) => {
+    const code = cont.charCodeAt(0);
+    if (code === 0xBF) return '¿';
+    if (code === 0xA1 && !/\p{L}/u.test(text[offset - 1] || '')) return '¡';
+    return String.fromCharCode(0xC0 + (code - 0x80));
+  });
 }
 
 // Valida el cuerpo: solo roles user/assistant, texto corto, y el último mensaje del visitante.
