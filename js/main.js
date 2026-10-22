@@ -8,13 +8,17 @@ const themeBtn = document.querySelector('.theme-btn');
 const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
 
 function applyTheme(theme, animate) {
-  if (animate) {
-    root.classList.add('theme-switching');
-    clearTimeout(applyTheme.timer);
-    applyTheme.timer = setTimeout(() => root.classList.remove('theme-switching'), 300);
+  const set = () => {
+    root.setAttribute('data-theme', theme);
+    themeBtn.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a modo día' : 'Cambiar a modo noche');
+  };
+  // Fundido entre la página vieja y la nueva (el CSS fija la duración). Sin soporte o con
+  // "reducir movimiento", el tema cambia al instante
+  if (animate && document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.startViewTransition(set);
+  } else {
+    set();
   }
-  root.setAttribute('data-theme', theme);
-  themeBtn.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a modo día' : 'Cambiar a modo noche');
 }
 applyTheme(root.getAttribute('data-theme') || 'light', false);
 
@@ -53,7 +57,7 @@ const canObserve = 'IntersectionObserver' in window;
 
 // Línea de tiempo: la línea se dibuja y cada punto se enciende cuando la línea lo alcanza
 const journey = document.querySelector('.journey');
-const LINE_SECONDS = 1.6; // igual que la transición de .timeline::before en el CSS
+const LINE_SECONDS = 0.6; // igual que la transición de .timeline::before en el CSS
 
 function drawTimeline() {
   journey.querySelectorAll('.timeline').forEach(list => {
@@ -338,10 +342,14 @@ function renderNoirStep(stepId, moveFocus) {
     list.appendChild(back);
   }
 
-  // Transición suave: se reinicia la animación de entrada del contenido (el CSS la desactiva con reduced motion)
-  body.classList.remove('is-changing');
-  void body.offsetWidth;
-  body.classList.add('is-changing');
+  // Transición suave: se reinicia la animación de entrada del contenido (el CSS la desactiva con reduced motion).
+  // Solo con el panel abierto: leer offsetWidth obliga a calcular el diseño de toda la página,
+  // y al cargar (panel cerrado) eso retrasaba el primer pintado útil
+  if (noirIsOpen()) {
+    body.classList.remove('is-changing');
+    void body.offsetWidth;
+    body.classList.add('is-changing');
+  }
   body.scrollTop = 0;
 
   if (moveFocus) list.querySelector('.noir-option').focus();
