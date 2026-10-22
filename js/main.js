@@ -12,12 +12,21 @@ function applyTheme(theme, animate) {
     root.setAttribute('data-theme', theme);
     themeBtn.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a modo día' : 'Cambiar a modo noche');
   };
-  // Fundido entre la página vieja y la nueva (el CSS fija la duración). Sin soporte o con
-  // "reducir movimiento", el tema cambia al instante
-  if (animate && document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  // La página nueva aparece sobre la vieja (el CSS fija la duración). Con "reducir movimiento",
+  // el tema cambia al instante
+  if (!animate || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    set();
+  } else if (document.startViewTransition) {
     document.startViewTransition(set);
   } else {
+    // Sin View Transitions: un velo del color anterior cubre la página y se desvanece
+    const velo = document.createElement('div');
+    velo.className = 'tema-velo';
+    velo.style.background = getComputedStyle(document.body).backgroundColor;
+    document.body.appendChild(velo);
     set();
+    requestAnimationFrame(() => requestAnimationFrame(() => velo.classList.add('is-fading')));
+    velo.addEventListener('transitionend', () => velo.remove(), { once: true });
   }
 }
 applyTheme(root.getAttribute('data-theme') || 'light', false);
@@ -127,8 +136,10 @@ if (filtros) {
   filtros.hidden = false;
 }
 
-// Galería de capturas: cada miniatura es un enlace a la imagen grande (funciona sin JavaScript);
-// aquí se abre en el visor (<dialog>), con flechas para pasar y Esc o clic fuera para cerrar
+// Capturas de proyectos: cada miniatura (.galeria-item) o captura (.zoom) es un enlace a la imagen
+// grande (funciona sin JavaScript); aquí se abre en el visor (<dialog>), con flechas para pasar y
+// Esc o clic fuera para cerrar. Las capturas sueltas llevan una lupa para que se vea que se amplían
+const LUPA_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M11 8.5v5M8.5 11h5"/></svg>';
 const visor = document.querySelector('.visor');
 if (visor && typeof visor.showModal === 'function') {
   const visorImg = visor.querySelector('.visor-img');
@@ -149,11 +160,14 @@ if (visor && typeof visor.showModal === 'function') {
     visorImg.alt = alt;
     visorTexto.textContent = alt;
     visorCuenta.textContent = (actual + 1) + ' / ' + items.length;
+    visor.classList.toggle('visor-ancho', Number(item.dataset.w) > Number(item.dataset.h));  // apaisada: visor más ancho
   }
 
   document.querySelectorAll('.galeria').forEach(galeria => {
-    const propios = [...galeria.querySelectorAll('.galeria-item')];
+    const propios = [...galeria.querySelectorAll('.galeria-item, .zoom')];
     propios.forEach((item, i) => {
+      item.setAttribute('aria-haspopup', 'dialog');
+      if (item.matches('.zoom')) item.insertAdjacentHTML('beforeend', '<span class="zoom-lupa">' + LUPA_SVG + '</span>');
       item.addEventListener('click', e => {
         if (e.metaKey || e.ctrlKey || e.shiftKey) return;  // abrir en pestaña nueva sigue funcionando
         e.preventDefault();
