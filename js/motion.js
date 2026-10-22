@@ -36,7 +36,7 @@ function reveal(el) {
   if (!queue.length) requestAnimationFrame(() => {
     const batch = queue;
     queue = [];
-    animate(batch, { opacity: [0, 1], y: [16, 0] }, { duration: 0.5, ease: EASE, delay: stagger(0.08) });
+    animate(batch, { opacity: [0, 1], y: [12, 0] }, { duration: 0.35, ease: EASE, delay: stagger(0.05) });
   });
   queue.push(el);
 }
@@ -49,7 +49,8 @@ function reveals() {
   const items = [...document.querySelectorAll(REVEAL)].filter(el => el.getBoundingClientRect().top > innerHeight);
   items.forEach(el => {
     el.style.opacity = '0';
-    const stop = inView(el, () => { reveal(el); stop(); pending.delete(el); }, { amount: 0.15 });
+    // margin: empieza un poco antes de que llegue a la pantalla, para que al bajar rápido no se vean huecos
+    const stop = inView(el, () => { reveal(el); stop(); pending.delete(el); }, { margin: '0px 0px 15% 0px' });
     pending.set(el, stop);
   });
 }
