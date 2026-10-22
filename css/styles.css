@@ -466,15 +466,23 @@ main > section + section::after {
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   box-shadow: var(--shadow-md);
 }
-/* Comentario de Noir sobre el proyecto */
-.visor-noir {
-  display: flex; align-items: flex-start; gap: .75rem;
-  margin: .9rem 1rem 0; padding: .7rem .9rem;
-  background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: var(--radius);
-}
+/* Comentario de Noir sobre el proyecto: Noir con su lupa y un globo de diálogo que sale de ella */
+.visor-noir { display: flex; align-items: center; gap: 1rem; margin: .9rem 1rem 0; }
 .visor-noir[hidden] { display: none; }
-.visor-noir img { width: 34px; height: auto; flex-shrink: 0; }
-.visor-noir p { font-size: .93rem; line-height: 1.55; color: var(--text); }
+.visor-noir img { width: 68px; height: auto; flex-shrink: 0; border-radius: 6px; }
+.visor-noir-globo {
+  position: relative; flex: 1;
+  padding: .7rem .95rem;
+  font-size: .93rem; line-height: 1.55; color: var(--text);
+  background: var(--bg); border: 1px solid var(--gold); border-radius: 12px;
+}
+/* Pico del globo, apuntando a Noir */
+.visor-noir-globo::before {
+  content: ''; position: absolute; left: -7px; top: 50%;
+  width: 12px; height: 12px; margin-top: -6px;
+  background: var(--bg); border-left: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
 .visor-noir-quien { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--accent); margin-right: .2rem; }
 .visor-noir-texto { font-style: italic; }
 .visor-btn {
@@ -1013,7 +1021,9 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 @media (max-width: 440px) {
   .galeria-lista { grid-template-columns: repeat(2, 1fr); }
   .zoom-lupa { width: 28px; height: 28px; right: .45rem; bottom: .45rem; }
-  .visor-img { max-height: calc(92vh - 21rem); }  /* deja sitio al comentario de Noir y a los controles */
+  .visor-img { max-height: calc(92vh - 23rem); }  /* deja sitio al comentario de Noir y a los controles */
+  .visor-noir { gap: .8rem; }
+  .visor-noir img { width: 52px; }
   .zoom-lupa svg { width: 15px; height: 15px; }
   .shot-strip .zoom-lupa { width: 22px; height: 22px; right: .3rem; bottom: .3rem; }
   .shot-strip .zoom-lupa svg { width: 12px; height: 12px; }
