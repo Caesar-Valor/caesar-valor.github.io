@@ -445,7 +445,7 @@ main > section + section::after {
 /* Visor de capturas (<dialog>) */
 .visor {
   margin: auto;  /* el reset general lo quita y el diálogo no se centraría */
-  padding: 0; overflow: hidden;
+  padding: 0; overflow: auto;  /* en pantallas bajas se desplaza en lugar de cortar los controles */
   width: min(92vw, 480px); max-height: 92vh;
   color: var(--text); background: var(--surface);
   border: 1px solid var(--border); border-radius: var(--radius);
@@ -454,12 +454,29 @@ main > section + section::after {
 .visor[open] { display: flex; flex-direction: column; }
 .visor.visor-ancho { width: min(94vw, 1100px); }
 .visor::backdrop { background: rgba(18, 17, 16, .72); }
-.visor-figura { margin: 0; min-height: 0; }
-.visor-img { display: block; width: 100%; height: auto; max-height: calc(92vh - 8.5rem); object-fit: contain; background: var(--bg-alt); }
+.visor-figura { margin: 0; }
+.visor[open] > * { flex-shrink: 0; }  /* si no cabe, el visor se desplaza; nada se encoge ni se monta encima */
+.visor-img { display: block; width: 100%; height: auto; max-height: calc(92vh - 15rem); object-fit: contain; background: var(--bg-alt); }
 .visor-texto { padding: .8rem 1rem 0; font-size: .88rem; line-height: 1.5; color: var(--muted); }
 .visor-controles { display: flex; align-items: center; gap: .4rem; padding: .6rem .8rem .8rem; }
 .visor-cuenta { min-width: 3.5em; text-align: center; font-family: var(--font-mono); font-size: .8rem; color: var(--muted); }
-.visor-cerrar { margin-left: auto; }
+/* La X flota en la esquina superior derecha, sobre la captura */
+.visor .visor-cerrar {
+  position: absolute; top: .6rem; right: .6rem; z-index: 2;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  box-shadow: var(--shadow-md);
+}
+/* Comentario de Noir sobre el proyecto */
+.visor-noir {
+  display: flex; align-items: flex-start; gap: .75rem;
+  margin: .9rem 1rem 0; padding: .7rem .9rem;
+  background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: var(--radius);
+}
+.visor-noir[hidden] { display: none; }
+.visor-noir img { width: 34px; height: auto; flex-shrink: 0; }
+.visor-noir p { font-size: .93rem; line-height: 1.55; color: var(--text); }
+.visor-noir-quien { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--accent); margin-right: .2rem; }
+.visor-noir-texto { font-style: italic; }
 .visor-btn {
   display: grid; place-items: center; width: 44px; height: 44px;
   color: var(--text); background: var(--bg);
@@ -996,6 +1013,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 @media (max-width: 440px) {
   .galeria-lista { grid-template-columns: repeat(2, 1fr); }
   .zoom-lupa { width: 28px; height: 28px; right: .45rem; bottom: .45rem; }
+  .visor-img { max-height: calc(92vh - 21rem); }  /* deja sitio al comentario de Noir y a los controles */
   .zoom-lupa svg { width: 15px; height: 15px; }
   .shot-strip .zoom-lupa { width: 22px; height: 22px; right: .3rem; bottom: .3rem; }
   .shot-strip .zoom-lupa svg { width: 12px; height: 12px; }

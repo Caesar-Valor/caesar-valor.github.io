@@ -145,6 +145,7 @@ if (visor && typeof visor.showModal === 'function') {
   const visorImg = visor.querySelector('.visor-img');
   const visorTexto = visor.querySelector('.visor-texto');
   const visorCuenta = visor.querySelector('.visor-cuenta');
+  const visorNoir = visor.querySelector('.visor-noir');
   let items = [];
   let actual = 0;
   let opener = null;
@@ -173,6 +174,9 @@ if (visor && typeof visor.showModal === 'function') {
         e.preventDefault();
         items = propios;
         opener = item;
+        // Comentario de Noir sobre el proyecto (data-noir de la figura); sin comentario no se muestra
+        visorNoir.querySelector('.visor-noir-texto').textContent = galeria.dataset.noir || '';
+        visorNoir.hidden = !galeria.dataset.noir;
         mostrar(i);
         visor.classList.toggle('visor-una', items.length === 1);
         visor.showModal();
