@@ -123,6 +123,62 @@ if (filtros) {
   filtros.hidden = false;
 }
 
+// Galería de capturas: cada miniatura es un enlace a la imagen grande (funciona sin JavaScript);
+// aquí se abre en el visor (<dialog>), con flechas para pasar y Esc o clic fuera para cerrar
+const visor = document.querySelector('.visor');
+if (visor && typeof visor.showModal === 'function') {
+  const visorImg = visor.querySelector('.visor-img');
+  const visorTexto = visor.querySelector('.visor-texto');
+  const visorCuenta = visor.querySelector('.visor-cuenta');
+  let items = [];
+  let actual = 0;
+  let opener = null;
+
+  function mostrar(i) {
+    actual = (i + items.length) % items.length;
+    const item = items[actual];
+    const alt = item.querySelector('img').alt;
+    // Medidas reales antes de cargar: el visor no salta al cambiar de imagen
+    visorImg.width = item.dataset.w;
+    visorImg.height = item.dataset.h;
+    visorImg.src = item.href;
+    visorImg.alt = alt;
+    visorTexto.textContent = alt;
+    visorCuenta.textContent = (actual + 1) + ' / ' + items.length;
+  }
+
+  document.querySelectorAll('.galeria').forEach(galeria => {
+    const propios = [...galeria.querySelectorAll('.galeria-item')];
+    propios.forEach((item, i) => {
+      item.addEventListener('click', e => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return;  // abrir en pestaña nueva sigue funcionando
+        e.preventDefault();
+        items = propios;
+        opener = item;
+        mostrar(i);
+        visor.classList.toggle('visor-una', items.length === 1);
+        visor.showModal();
+        visor.querySelector('.visor-cerrar').focus();
+      });
+    });
+  });
+
+  visor.addEventListener('click', e => {
+    const paso = e.target.closest('[data-paso]');
+    if (paso) mostrar(actual + Number(paso.dataset.paso));
+    else if (e.target.closest('.visor-cerrar') || e.target === visor) visor.close();  // e.target === visor: clic en el fondo
+  });
+  visor.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') mostrar(actual - 1);
+    if (e.key === 'ArrowRight') mostrar(actual + 1);
+  });
+  // Al cerrar (botón, clic fuera o Esc) el foco vuelve a la miniatura que lo abrió
+  visor.addEventListener('close', () => {
+    visorImg.src = 'data:,';
+    if (opener) opener.focus();
+  });
+}
+
 /* ===== Asistente de Noir =====
    Menú guiado por pasos y, si NOIR_API tiene la URL del Worker (noir-worker/),
    un chat con IA debajo. Al escribir el primer mensaje, el menú se cambia por
