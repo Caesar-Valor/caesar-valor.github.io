@@ -355,15 +355,17 @@
     </article>
 
     <article class="expediente flip" data-cat="sistemas">
-      <div class="shot" aria-hidden="true">
-        <div class="shot-bar"><span></span><span></span><span></span></div>
-        <div class="shot-body">
-          <div class="row accent"></div>
-          <div class="tiles"><div></div><div></div><div></div></div>
-          <div class="row w85"></div><div class="row w70"></div>
-        </div>
-        <div class="shot-note">Captura próximamente</div>
-      </div>
+      <!-- Galería: sin JavaScript cada miniatura abre la imagen; con JavaScript se amplía en el visor (main.js) -->
+      <figure class="shot shot-img galeria">
+        <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+        <ul class="galeria-lista">
+          <li><a class="galeria-item" href="img/pasantia-turnos-01.webp" data-w="428" data-h="722"><img src="img/pasantia-turnos-01-mini.webp" alt="Pantalla de registro: nombre completo, correo, contraseña de mínimo 8 caracteres, confirmación y registro con Google" width="240" height="405" loading="lazy"></a></li>
+          <li><a class="galeria-item" href="img/pasantia-turnos-02.webp" data-w="428" data-h="748"><img src="img/pasantia-turnos-02-mini.webp" alt="Registro con datos de prueba: el indicador marca la contraseña como fuerte y el botón Registrarse se activa" width="240" height="419" loading="lazy"></a></li>
+          <li><a class="galeria-item" href="img/pasantia-turnos-03.webp" data-w="428" data-h="392"><img src="img/pasantia-turnos-03-mini.webp" alt="Pantalla de contraseña olvidada: campo de correo para recibir el enlace de restablecimiento" width="240" height="220" loading="lazy"></a></li>
+          <li><a class="galeria-item" href="img/pasantia-turnos-04.webp" data-w="428" data-h="470"><img src="img/pasantia-turnos-04-mini.webp" alt="Pantalla para crear una contraseña nueva y confirmarla" width="240" height="264" loading="lazy"></a></li>
+        </ul>
+        <figcaption class="galeria-nota">Pantallas que desarrollé. Logo y correo de prueba difuminados.</figcaption>
+      </figure>
       <div class="expediente-body">
         <p class="expediente-num">Expediente 06</p>
         <h3>Sistema de gestión de turnos</h3>
@@ -378,16 +380,18 @@
           </div>
           <div class="caso-bloque">
             <h4>Mi aporte</h4>
-            <p>Desarrollo del backend dentro de un equipo con revisión de código: 8 módulos y 40 endpoints, autenticación con JWT, contraseñas cifradas con bcrypt, validación de datos con Zod, límite de intentos en registro e inicio de sesión contra ataques de fuerza bruta, y control para que cada negocio solo acceda a su información. También la pantalla de registro del frontend.</p>
+            <p>Trabajo en equipo, con revisión de código en cada pull request.</p>
+            <p><strong>Backend:</strong> el módulo de identidad y la estructura multiempresa. Registro e inicio de sesión con contraseñas cifradas con bcrypt y tokens JWT, el middleware de autenticación y 40 endpoints para negocios, sucursales, departamentos, servicios, filas, puestos de atención y usuarios, con validación para que cada negocio solo acceda a sus datos. Tras la revisión del equipo migré el acceso a datos a Prisma 7 y añadí un límite de intentos por IP en el registro, el inicio de sesión y la recuperación de contraseña, contra ataques de fuerza bruta.</p>
+            <p><strong>Frontend:</strong> las pantallas de registro (con validación e indicador de fuerza de la contraseña), de contraseña olvidada y de restablecer contraseña, su conexión con la API y el ajuste del registro al diseño aprobado.</p>
           </div>
         </div>
       </div>
       <aside class="ficha" aria-label="Ficha técnica: Sistema de gestión de turnos">
         <p class="ficha-title">Ficha técnica</p>
         <dl>
-          <div><dt>Tecnologías</dt><dd><ul class="tags"><li>Next.js</li><li>Express</li><li>Prisma</li><li>PostgreSQL</li><li>Multi-tenant</li></ul></dd></div>
+          <div><dt>Tecnologías</dt><dd><ul class="tags"><li>Next.js</li><li>TypeScript</li><li>Express</li><li>Prisma</li><li>PostgreSQL</li><li>Zod</li><li>Multi-tenant</li></ul></dd></div>
           <div><dt>Estado</dt><dd>Pasantía</dd></div>
-          <div><dt>Mi rol</dt><dd>Desarrollador (pasantía)</dd></div>
+          <div><dt>Mi rol</dt><dd>Desarrollador backend y frontend (pasantía)</dd></div>
         </dl>
         <p class="ficha-nota">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
@@ -648,6 +652,26 @@
   </form>
   <p class="noir-foot">Respondo personalmente por WhatsApp en menos de 24 horas.</p>
 </div>
+
+<!-- Visor de capturas: lo abre main.js desde las miniaturas de .galeria. Esc o clic fuera lo cierran -->
+<dialog class="visor" aria-labelledby="visor-texto">
+  <figure class="visor-figura">
+    <img class="visor-img" src="data:," alt="">
+    <figcaption id="visor-texto" class="visor-texto"></figcaption>
+  </figure>
+  <div class="visor-controles">
+    <button type="button" class="visor-btn" data-paso="-1" aria-label="Captura anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <span class="visor-cuenta" aria-hidden="true"></span>
+    <button type="button" class="visor-btn" data-paso="1" aria-label="Captura siguiente">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <button type="button" class="visor-btn visor-cerrar" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+</dialog>
 
 <script src="js/main.js"></script>
 <script type="module" src="js/motion.js"></script>

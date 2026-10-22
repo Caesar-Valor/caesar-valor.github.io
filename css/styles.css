@@ -362,6 +362,8 @@ main > section + section::after {
 .caso { display: grid; gap: 1.25rem; margin: 1.2rem 0 1.6rem; }
 .caso-bloque h4 { font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: .3rem; }
 .caso-bloque p { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 60ch; }
+.caso-bloque p + p { margin-top: .6rem; }
+.caso-bloque strong { color: var(--text); font-weight: 600; }
 .project-links { display: flex; flex-wrap: wrap; gap: 1rem; }
 
 /* Filtros de Proyectos (ocultos sin JavaScript: main.js los muestra) */
@@ -388,6 +390,48 @@ main > section + section::after {
 /* Dos capturas pequeñas debajo de la principal (sistema de cobro) */
 .shot-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
 .shot-strip img { display: block; }
+/* Galería de miniaturas (pasantía): se recortan por arriba, la imagen completa sale en el visor */
+.galeria-lista { list-style: none; margin: 0; padding: .9rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; background: var(--bg-alt); }
+.galeria-item {
+  display: block; aspect-ratio: 3 / 4; overflow: hidden;
+  background: #FAFAFA;  /* el fondo de las capturas */
+  border: 1px solid var(--border); border-radius: 4px;
+  cursor: zoom-in;
+  transition: border-color .2s ease;
+}
+.galeria-item img { display: block; width: 100%; height: auto; }  /* a todo el ancho; lo que sobra por abajo se oculta */
+.galeria-item:hover { border-color: var(--gold); }
+.galeria-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.galeria-nota { font-size: .78rem; color: var(--muted); text-align: center; padding: .6rem; border-top: 1px solid var(--border); }
+
+/* Visor de capturas (<dialog>) */
+.visor {
+  margin: auto;  /* el reset general lo quita y el diálogo no se centraría */
+  padding: 0; overflow: hidden;
+  width: min(92vw, 480px); max-height: 92vh;
+  color: var(--text); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+.visor[open] { display: flex; flex-direction: column; }
+.visor::backdrop { background: rgba(18, 17, 16, .72); }
+.visor-figura { margin: 0; min-height: 0; }
+.visor-img { display: block; width: 100%; height: auto; max-height: calc(92vh - 8.5rem); object-fit: contain; background: #FAFAFA; }
+.visor-texto { padding: .8rem 1rem 0; font-size: .88rem; line-height: 1.5; color: var(--muted); }
+.visor-controles { display: flex; align-items: center; gap: .4rem; padding: .6rem .8rem .8rem; }
+.visor-cuenta { min-width: 3.5em; text-align: center; font-family: var(--font-mono); font-size: .8rem; color: var(--muted); }
+.visor-cerrar { margin-left: auto; }
+.visor-btn {
+  display: grid; place-items: center; width: 44px; height: 44px;
+  color: var(--text); background: var(--bg);
+  border: 1px solid var(--border); border-radius: 50%;
+  cursor: pointer;
+  transition: border-color .2s ease;
+}
+.visor-btn svg { width: 20px; height: 20px; }
+.visor-btn:hover { border-color: var(--gold); }
+.visor-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.visor-una :is([data-paso], .visor-cuenta) { display: none; }
 
 /* Ficha técnica */
 .ficha {
@@ -870,6 +914,9 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   .about .wrap { grid-template-columns: 1fr; gap: 2rem; }
   .photo { width: 160px; height: 160px; }
   .services-grid, .skills-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 440px) {
+  .galeria-lista { grid-template-columns: repeat(2, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
