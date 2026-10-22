@@ -179,6 +179,46 @@ if (visor && typeof visor.showModal === 'function') {
   });
 }
 
+// Repositorios privados: el botón parece el de GitHub, pero abre a Noir con el libro y la llave.
+// Cuenta los intentos por repositorio en la sesión; desde el tercero, Noir pierde la paciencia.
+const noirLlave = document.querySelector('.noir-llave');
+if (noirLlave && typeof noirLlave.showModal === 'function') {
+  const LLAVE_KEY = 'noir-llave-intentos';  // sessionStorage: { repo: intentos }
+  const LLAVE_INSISTE = 3;
+  const llaveTexto = noirLlave.querySelector('.noir-llave-texto');
+  const DUENOS = {
+    cliente: 'pertenece a un cliente de Cesar',
+    empresa: 'pertenece a la empresa donde Cesar hizo su pasantía',
+  };
+  let intentos = {};
+  try { intentos = JSON.parse(sessionStorage.getItem(LLAVE_KEY)) || {}; } catch (e) {}
+  let llaveOpener = null;
+
+  document.querySelectorAll('.repo-privado').forEach(b => {
+    b.hidden = false;
+    b.nextElementSibling.hidden = true;  // la etiqueta .codigo-privado queda solo para quien no tiene JavaScript
+    b.addEventListener('click', () => {
+      const repo = b.dataset.repo;
+      intentos[repo] = (intentos[repo] || 0) + 1;
+      try { sessionStorage.setItem(LLAVE_KEY, JSON.stringify(intentos)); } catch (e) {}
+      llaveTexto.textContent = intentos[repo] >= LLAVE_INSISTE
+        ? 'Por más que lo intentes, no podrás abrirlo. La llave la tengo yo… y no pienso soltarla.'
+        : 'Este expediente lo guardo bajo llave. El código ' + DUENOS[b.dataset.dueno] + ', y sus secretos no son míos para contarlos.';
+      llaveOpener = b;
+      noirLlave.showModal();
+      noirLlave.querySelector('.noir-llave-ok').focus();
+    });
+  });
+
+  noirLlave.addEventListener('click', e => {
+    // Clic en el fondo: el destino es el propio <dialog> y el punto cae fuera de su caja
+    const r = noirLlave.getBoundingClientRect();
+    const fuera = e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+    if (e.target.closest('.noir-llave-ok') || (e.target === noirLlave && fuera)) noirLlave.close();
+  });
+  noirLlave.addEventListener('close', () => { if (llaveOpener) llaveOpener.focus(); });
+}
+
 /* ===== Asistente de Noir =====
    Menú guiado por pasos y, si NOIR_API tiene la URL del Worker (noir-worker/),
    un chat con IA debajo. Al escribir el primer mensaje, el menú se cambia por
