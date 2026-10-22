@@ -169,7 +169,7 @@
 
     <!-- Casos reales de un mismo cliente: el texto no lo nombra, pero la demo de la web sí (ver NOTAS.md) -->
     <article class="expediente" data-cat="web">
-      <figure class="shot shot-img galeria">
+      <figure class="shot shot-img galeria" data-noir="Tres servicios en un solo sitio y pedidos que llegan completos por WhatsApp. Ni un plato se pierde por el camino.">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <a class="zoom" href="img/demo-web-carta.webp" data-w="1200" data-h="749"><img src="img/demo-web-carta.webp" alt="Carta del restaurante en la web: secciones, filtros por tipo de comida y platos con precio por tamaño" width="1200" height="749" loading="lazy"></a>
       </figure>
@@ -209,7 +209,7 @@
     </article>
 
     <article class="expediente flip" data-cat="sistemas">
-      <figure class="shot shot-img galeria">
+      <figure class="shot shot-img galeria" data-noir="Cada rol entra con su PIN y solo ve lo suyo. Hasta la caja se cuadra a ciegas: aquí nadie hace trampas.">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <a class="zoom" href="img/demo-cobro-cuenta.webp" data-w="1200" data-h="806"><img src="img/demo-cobro-cuenta.webp" alt="Cuenta de una mesa en el sistema de cobro: platos con notas, estado de cada uno, ITBIS, propina legal y total" width="1200" height="806" loading="lazy"></a>
         <div class="shot-strip">
@@ -254,7 +254,7 @@
     </article>
 
     <article class="expediente" data-cat="web">
-      <figure class="shot shot-img galeria">
+      <figure class="shot shot-img galeria" data-noir="Adiós a los pedidos dictados por audio: el cliente arma el suyo y lo envía completo con un toque.">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <a class="zoom" href="img/demo-cafeteria.webp" data-w="1200" data-h="526"><img src="img/demo-cafeteria.webp" alt="Captura de la web de Amor y Café, cafetería de demostración" width="1200" height="526" loading="lazy"></a>
       </figure>
@@ -296,7 +296,7 @@
     </article>
 
     <article class="expediente flip" data-cat="seguridad">
-      <figure class="shot shot-img galeria">
+      <figure class="shot shot-img galeria" data-noir="Puertos abiertos, enlaces sospechosos y un informe en PDF. Husmear es mi especialidad; la de esta herramienta, también.">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <a class="zoom" href="img/demo-forensicshield.webp" data-w="1200" data-h="592"><img src="img/demo-forensicshield.webp" alt="Captura de ForensicShield Lite" width="1200" height="592" loading="lazy"></a>
       </figure>
@@ -336,7 +336,7 @@
     </article>
 
     <article class="expediente" data-cat="sistemas">
-      <figure class="shot shot-img galeria">
+      <figure class="shot shot-img galeria" data-noir="Quien no trae su token, no pasa. Me recuerda a cierta puerta que yo vigilo.">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <a class="zoom" href="img/demo-evs.webp" data-w="1200" data-h="459"><img src="img/demo-evs.webp" alt="Captura de la API de comprobantes electrónicos con datos de prueba" width="1200" height="459" loading="lazy"></a>
       </figure>
@@ -378,7 +378,7 @@
 
     <article class="expediente flip" data-cat="sistemas">
       <!-- Galería: sin JavaScript cada miniatura abre la imagen; con JavaScript se amplía en el visor (main.js) -->
-      <figure class="shot shot-img galeria">
+      <figure class="shot shot-img galeria" data-noir="Varios negocios en la misma plataforma y ninguno puede asomarse a los datos del otro. Discreción, mi virtud favorita.">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <ul class="galeria-lista">
           <li><a class="galeria-item" href="img/pasantia-turnos-01.webp" data-w="428" data-h="722"><img src="img/pasantia-turnos-01-mini.webp" alt="Pantalla de registro: nombre completo, correo, contraseña de mínimo 8 caracteres, confirmación y registro con Google" width="240" height="405" loading="lazy"></a></li>
@@ -427,7 +427,7 @@
     </article>
 
     <article class="expediente" data-cat="web personal">
-      <figure class="shot shot-img galeria">
+      <figure class="shot shot-img galeria" data-noir="Cinco puertas, una por cada noche de octubre. Confieso que la de los murciélagos es mi favorita.">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <a class="zoom" href="img/demo-cartelera.webp" data-w="1200" data-h="750"><img src="img/demo-cartelera.webp" alt="Portada de la Cartelera misteriosa: cinco puertas en arco, una por cada noche de octubre" width="1200" height="750" loading="lazy"></a>
       </figure>
@@ -468,7 +468,7 @@
 
     <!-- App Android del curso de Programación Mobile (repo público aula-mobile) -->
     <article class="expediente flip is-last" data-cat="sistemas">
-      <figure class="shot shot-img galeria galeria-movil">
+      <figure class="shot shot-img galeria galeria-movil" data-noir="Notas y asistencia en el bolsillo, con la sesión guardada bajo llave. Aprobado.">
         <div class="shot-bar" aria-hidden="true"><span></span><span></span><span></span></div>
         <ul class="galeria-lista">
           <li><a class="galeria-item" href="img/aula-mobile-01.webp" data-w="710" data-h="1450"><img src="img/aula-mobile-01-mini.webp" alt="Inicio de sesión de Aula Mobile: código de matrícula, contraseña y botón Entrar al aula" width="300" height="613" loading="lazy"></a></li>
@@ -729,8 +729,17 @@
 
 <!-- Visor de capturas: lo abre main.js desde las miniaturas de .galeria. Esc o clic fuera lo cierran -->
 <dialog class="visor" aria-labelledby="visor-texto">
+  <!-- La X va primero: es lo primero que se ve y lo primero que recibe el foco -->
+  <button type="button" class="visor-btn visor-cerrar" aria-label="Cerrar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
   <figure class="visor-figura">
     <img class="visor-img" src="data:," alt="">
+    <!-- Comentario de Noir sobre el proyecto (data-noir de la figura del expediente) -->
+    <div class="visor-noir" hidden>
+      <img src="img/noir-mirando.webp" alt="" width="546" height="897" loading="lazy">
+      <p><span class="visor-noir-quien">Noir</span> <span class="visor-noir-texto"></span></p>
+    </div>
     <figcaption id="visor-texto" class="visor-texto"></figcaption>
   </figure>
   <div class="visor-controles">
@@ -740,9 +749,6 @@
     <span class="visor-cuenta" aria-hidden="true"></span>
     <button type="button" class="visor-btn" data-paso="1" aria-label="Captura siguiente">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-    </button>
-    <button type="button" class="visor-btn visor-cerrar" aria-label="Cerrar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
   </div>
 </dialog>
