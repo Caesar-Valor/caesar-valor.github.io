@@ -364,7 +364,15 @@ main > section + section::after {
 .caso-bloque p { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 60ch; }
 .caso-bloque p + p { margin-top: .6rem; }
 .caso-bloque strong { color: var(--text); font-weight: 600; }
-.project-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+.project-links { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+/* En lugar del botón de GitHub cuando el repositorio es privado: borde punteado para no parecer un botón */
+.codigo-privado {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .45rem .95rem;
+  font-size: .88rem; color: var(--muted);
+  border: 1px dashed var(--border); border-radius: 999px;
+}
+.codigo-privado svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--accent); }
 
 /* Filtros de Proyectos (ocultos sin JavaScript: main.js los muestra) */
 .filtros { display: flex; flex-wrap: wrap; gap: .5rem; margin: -1.5rem 0 1rem; }
