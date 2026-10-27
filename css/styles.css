@@ -409,22 +409,19 @@ main > section + section::after {
 /* Dos capturas pequeñas debajo de la principal (sistema de cobro) */
 .shot-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
 .shot-strip img { display: block; }
-/* Capturas que se amplían en el visor: lupa siempre visible (también en el celular) */
-.zoom { position: relative; display: block; cursor: zoom-in; }
+/* Capturas que se amplían en el visor. La lupa va en la barra del marco (arriba a la derecha),
+   así no tapa nada de la captura; main.js la pone en el primer enlace de cada marco */
+.zoom { display: block; cursor: zoom-in; }
 .zoom:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; border-radius: 0; }
 .zoom-lupa {
-  position: absolute; right: .6rem; bottom: .6rem; z-index: 2;
-  display: grid; place-items: center; width: 34px; height: 34px;
-  color: var(--text); background: color-mix(in srgb, var(--surface) 90%, transparent);
+  position: absolute; top: 4px; right: 8px; z-index: 2;
+  display: grid; place-items: center; width: 24px; height: 24px;
+  color: var(--text); background: var(--surface);
   border: 1px solid var(--border); border-radius: 50%;
-  box-shadow: var(--shadow-sm);
-  opacity: .9;
-  transition: transform .25s cubic-bezier(.2, .7, .2, 1), opacity .25s ease;
+  transition: transform .25s cubic-bezier(.2, .7, .2, 1), border-color .25s ease;
 }
-.zoom-lupa svg { width: 18px; height: 18px; }
-.shot-strip .zoom-lupa { width: 28px; height: 28px; right: .4rem; bottom: .4rem; }
-.shot-strip .zoom-lupa svg { width: 15px; height: 15px; }
-.zoom:is(:hover, :focus-visible) .zoom-lupa { opacity: 1; transform: scale(1.1); }
+.zoom-lupa svg { width: 14px; height: 14px; }
+.galeria:hover .zoom-lupa, .galeria :focus-visible .zoom-lupa { transform: scale(1.12); border-color: var(--gold); }
 /* Galería de miniaturas (pasantía): se recortan por arriba, la imagen completa sale en el visor */
 .galeria-lista { list-style: none; margin: 0; padding: .9rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; background: var(--bg-alt); }
 .galeria-item {
@@ -442,38 +439,38 @@ main > section + section::after {
 .galeria-movil .galeria-item { aspect-ratio: auto; background: #0B0F11; border-radius: 10px; }
 .galeria-nota { font-size: .78rem; color: var(--muted); text-align: center; padding: .6rem; border-top: 1px solid var(--border); }
 
-/* Visor de capturas (<dialog>) */
+/* Visor de capturas (<dialog>). La captura nunca queda tapada:
+   escritorio: captura a la izquierda con toda la altura; a la derecha, la barra (‹ 1/4 › y X) y debajo Noir y la descripción
+   celular: pantalla completa, barra fija arriba, captura a todo el ancho y Noir debajo */
 .visor {
   margin: auto;  /* el reset general lo quita y el diálogo no se centraría */
-  padding: 0; overflow: auto;  /* en pantallas bajas se desplaza en lugar de cortar los controles */
-  width: min(92vw, 480px); max-height: 92vh;
+  padding: 0; overflow: hidden;
+  width: max-content; max-width: 96vw; max-height: 96vh;
   color: var(--text); background: var(--surface);
   border: 1px solid var(--border); border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
 }
-.visor[open] { display: flex; flex-direction: column; }
-.visor.visor-ancho { width: min(94vw, 1100px); }
-.visor::backdrop { background: rgba(18, 17, 16, .72); }
-.visor-figura { margin: 0; }
-.visor[open] > * { flex-shrink: 0; }  /* si no cabe, el visor se desplaza; nada se encoge ni se monta encima */
-.visor-img { display: block; width: 100%; height: auto; max-height: calc(92vh - 15rem); object-fit: contain; background: var(--bg-alt); }
-.visor-texto { padding: .8rem 1rem 0; font-size: .88rem; line-height: 1.5; color: var(--muted); }
-.visor-controles { display: flex; align-items: center; gap: .4rem; padding: .6rem .8rem .8rem; }
-.visor-cuenta { min-width: 3.5em; text-align: center; font-family: var(--font-mono); font-size: .8rem; color: var(--muted); }
-/* La X flota en la esquina superior derecha, sobre la captura */
-.visor .visor-cerrar {
-  position: absolute; top: .6rem; right: .6rem; z-index: 2;
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  box-shadow: var(--shadow-md);
+.visor[open] {
+  display: grid;
+  grid-template-columns: auto 300px; grid-template-rows: auto 1fr;
+  grid-template-areas: "imagen barra" "imagen info";
 }
+.visor::backdrop { background: rgba(18, 17, 16, .72); }
+.visor-barra { grid-area: barra; display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .8rem .8rem .5rem 1rem; }
+.visor-imagen { grid-area: imagen; display: grid; place-items: center; min-width: 0; background: var(--bg-alt); border-right: 1px solid var(--border); }
+.visor-img { display: block; width: auto; height: auto; max-width: calc(96vw - 302px); max-height: calc(96vh - 2px); }
+.visor-info { grid-area: info; min-height: 0; overflow-y: auto; padding: .5rem 1rem 1.2rem; }
+.visor-texto { margin-top: .9rem; font-size: .88rem; line-height: 1.5; color: var(--muted); }
+.visor-controles { display: flex; align-items: center; gap: .4rem; }
+.visor-cuenta { min-width: 3.5em; text-align: center; font-family: var(--font-mono); font-size: .8rem; color: var(--muted); }
 /* Comentario de Noir sobre el proyecto: Noir con su lupa y un globo de diálogo que sale de ella */
-.visor-noir { display: flex; align-items: center; gap: 1rem; margin: .9rem 1rem 0; }
+.visor-noir { display: flex; align-items: center; gap: .9rem; }
 .visor-noir[hidden] { display: none; }
-.visor-noir img { width: 68px; height: auto; flex-shrink: 0; border-radius: 6px; }
+.visor-noir img { width: 60px; height: auto; flex-shrink: 0; border-radius: 6px; }
 .visor-noir-globo {
   position: relative; flex: 1;
-  padding: .7rem .95rem;
-  font-size: .93rem; line-height: 1.55; color: var(--text);
+  padding: .7rem .9rem;
+  font-size: .92rem; line-height: 1.55; color: var(--text);
   background: var(--bg); border: 1px solid var(--gold); border-radius: 12px;
 }
 /* Pico del globo, apuntando a Noir */
@@ -496,6 +493,23 @@ main > section + section::after {
 .visor-btn:hover { border-color: var(--gold); }
 .visor-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .visor-una :is([data-paso], .visor-cuenta) { display: none; }
+/* Vista previa del CV: el mismo visor, con título y los botones de descargar y abrir en la columna derecha */
+.visor-cv-titulo { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; line-height: 1.1; }
+.visor-cv-acciones { display: grid; gap: .75rem; margin-top: 1rem; }
+.visor-cv-acciones .btn { justify-content: center; }
+.visor-cv-acciones .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 720px) {
+  /* En el celular los botones van antes de la página del CV, sin tener que bajar */
+  .visor-cv[open] { display: flex; flex-direction: column; }
+  .visor-cv .visor-imagen { order: 1; }
+  .visor { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; border: 0; border-radius: 0; overflow-y: auto; }
+  .visor[open] { display: block; }
+  .visor-barra { position: sticky; top: 0; z-index: 2; padding: .5rem .75rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .visor-imagen { border-right: 0; }
+  .visor-img { width: 100%; max-width: none; max-height: none; }
+  .visor-info { padding: 1rem 1rem 1.5rem; }
+  .visor-noir img { width: 52px; }
+}
 
 /* Ficha técnica */
 .ficha {
@@ -1020,13 +1034,6 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 }
 @media (max-width: 440px) {
   .galeria-lista { grid-template-columns: repeat(2, 1fr); }
-  .zoom-lupa { width: 28px; height: 28px; right: .45rem; bottom: .45rem; }
-  .visor-img { max-height: calc(92vh - 23rem); }  /* deja sitio al comentario de Noir y a los controles */
-  .visor-noir { gap: .8rem; }
-  .visor-noir img { width: 52px; }
-  .zoom-lupa svg { width: 15px; height: 15px; }
-  .shot-strip .zoom-lupa { width: 22px; height: 22px; right: .3rem; bottom: .3rem; }
-  .shot-strip .zoom-lupa svg { width: 12px; height: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
