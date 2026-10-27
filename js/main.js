@@ -201,6 +201,24 @@ if (visor && typeof visor.showModal === 'function') {
   });
 }
 
+// CV: el botón "Ver CV" enlaza al PDF (funciona sin JavaScript); aquí abre la vista previa (<dialog>) con
+// las opciones de descargarlo o abrirlo. Esc, la X o clic fuera la cierran
+const visorCv = document.querySelector('.visor-cv');
+const cvAbrir = document.querySelector('.cv-abrir');
+if (visorCv && cvAbrir && typeof visorCv.showModal === 'function') {
+  cvAbrir.setAttribute('aria-haspopup', 'dialog');
+  cvAbrir.addEventListener('click', e => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey) return;  // abrir en pestaña nueva sigue funcionando
+    e.preventDefault();
+    visorCv.showModal();
+    visorCv.querySelector('.visor-cerrar').focus();
+  });
+  visorCv.addEventListener('click', e => {
+    if (e.target.closest('.visor-cerrar') || e.target === visorCv) visorCv.close();  // e.target === visorCv: clic en el fondo
+  });
+  visorCv.addEventListener('close', () => cvAbrir.focus());
+}
+
 // Repositorios privados: el botón parece el de GitHub, pero abre a Noir con el libro y la llave.
 // Cuenta los intentos por repositorio en la sesión; desde el tercero, Noir pierde la paciencia.
 const noirLlave = document.querySelector('.noir-llave');

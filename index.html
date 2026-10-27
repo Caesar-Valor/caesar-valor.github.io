@@ -55,9 +55,10 @@
       <div class="hero-actions">
         <a href="#proyectos" class="btn btn-primary">Ver proyectos</a>
         <a href="#contacto" class="btn btn-ghost">Contáctame</a>
-        <a href="cv/cesar-valenzuela-cv.pdf" class="btn btn-ghost" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
-          Descargar CV
+        <!-- Abre la vista previa del CV (.visor-cv, al final). Al cambiar el CV, sube ?v= aquí y en .visor-cv -->
+        <a href="cv/cesar-valenzuela-cv.pdf?v=2026-10" class="btn btn-ghost cv-abrir">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>
+          Ver CV
         </a>
       </div>
       <p class="hero-facts"><span class="fact">4 proyectos reales</span> <span class="sep" aria-hidden="true">·</span> <span class="fact">Python y FastAPI</span> <span class="sep" aria-hidden="true">·</span> <span class="fact">Respuesta en menos de 24 horas</span></p>
@@ -727,29 +728,59 @@
   <p class="noir-foot">Respondo personalmente por WhatsApp en menos de 24 horas.</p>
 </div>
 
-<!-- Visor de capturas: lo abre main.js desde las miniaturas de .galeria. Esc o clic fuera lo cierran -->
+<!-- Visor de capturas: lo abre main.js desde las miniaturas de .galeria. Esc o clic fuera lo cierran.
+     La captura nunca queda tapada: los botones van en su propia barra y Noir con la descripción, al lado
+     (escritorio) o debajo (celular) -->
 <dialog class="visor" aria-labelledby="visor-texto">
-  <!-- La X va primero: es lo primero que se ve y lo primero que recibe el foco -->
-  <button type="button" class="visor-btn visor-cerrar" aria-label="Cerrar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-  </button>
-  <figure class="visor-figura">
+  <div class="visor-barra">
+    <div class="visor-controles">
+      <button type="button" class="visor-btn" data-paso="-1" aria-label="Captura anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <span class="visor-cuenta" aria-hidden="true"></span>
+      <button type="button" class="visor-btn" data-paso="1" aria-label="Captura siguiente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+    <button type="button" class="visor-btn visor-cerrar" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="visor-imagen">
     <img class="visor-img" src="data:," alt="">
+  </div>
+  <div class="visor-info">
     <!-- Noir examina la captura con su lupa y la comenta (data-noir de la figura del expediente) -->
     <div class="visor-noir" hidden>
-      <img src="img/noir-lupa-visor.webp" alt="" width="160" height="187" loading="lazy">
+      <img src="img/noir-lupa-visor.webp" alt="" width="160" height="187">
       <p class="visor-noir-globo"><span class="visor-noir-quien">Noir</span> <span class="visor-noir-texto"></span></p>
     </div>
-    <figcaption id="visor-texto" class="visor-texto"></figcaption>
-  </figure>
-  <div class="visor-controles">
-    <button type="button" class="visor-btn" data-paso="-1" aria-label="Captura anterior">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    <p id="visor-texto" class="visor-texto"></p>
+  </div>
+</dialog>
+
+<!-- Vista previa del CV: lo abre main.js desde el botón "Ver CV". La CSP no deja incrustar el PDF, así que se muestra
+     una imagen de la página. Al actualizar el CV: regenera img/cv-vista-previa.webp, el tamaño en KB y sube ?v=2026-10
+     aquí y en el botón del inicio, para que nadie vea una copia vieja guardada en caché -->
+<dialog class="visor visor-cv" aria-labelledby="cv-titulo">
+  <div class="visor-barra">
+    <h2 id="cv-titulo" class="visor-cv-titulo">Currículum</h2>
+    <button type="button" class="visor-btn visor-cerrar" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
-    <span class="visor-cuenta" aria-hidden="true"></span>
-    <button type="button" class="visor-btn" data-paso="1" aria-label="Captura siguiente">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-    </button>
+  </div>
+  <div class="visor-imagen">
+    <img class="visor-img" src="img/cv-vista-previa.webp?v=2026-10" alt="Vista previa del currículum de Cesar Valenzuela, desarrollador Python" width="1240" height="1755">
+  </div>
+  <div class="visor-info">
+    <p class="visor-texto">PDF · 1 página · 97 KB</p>
+    <div class="visor-cv-acciones">
+      <a href="cv/cesar-valenzuela-cv.pdf?v=2026-10" class="btn btn-primary" download="CV_Cesar_Valenzuela_Desarrollador_Python.pdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+        Descargar PDF
+      </a>
+      <a href="cv/cesar-valenzuela-cv.pdf?v=2026-10" class="btn btn-ghost" target="_blank" rel="noopener noreferrer">Abrir en el navegador</a>
+    </div>
   </div>
 </dialog>
 
